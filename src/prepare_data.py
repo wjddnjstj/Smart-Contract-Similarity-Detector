@@ -15,7 +15,7 @@ from sklearn.decomposition import PCA
 import pandas as pd
 from tqdm import tqdm
 
-import adjustText
+# import adjustText
 
 VOID_START = re.compile('//|/\*|"|\'')
 PRAGMA = re.compile('pragma solidity.*?;')
@@ -24,6 +24,8 @@ DQUOTE_END = re.compile('(?<!\\\\)"')
 
 
 COMPILED_DIR = 'compile_output'
+COMPILED_DIR_OPT = 'compile_output_opt'
+LOG_DIR = 'log'
 DATA_DIR = 'dataset'
 MODEL_WEIGHT = 'model_weight'
 if not os.path.isdir(MODEL_WEIGHT):
@@ -77,12 +79,18 @@ def get_solc(filename: str) -> Optional[Path]:
         return solcx.get_executable(version)
     except:
         return None
+
 from solcx.install import get_executable
 from solcx.install import install_solc_pragma
 
 if not os.path.isdir(COMPILED_DIR):
     os.mkdir(COMPILED_DIR)
 
+if not os.path.isdir(COMPILED_DIR_OPT):
+    os.mkdir(COMPILED_DIR_OPT)
+
+if not os.path.isdir(LOG_DIR):
+    os.mkdir(LOG_DIR)
 
 def get_solc(filename: str) -> Optional[Path]:
     with open(filename) as f:
@@ -96,7 +104,7 @@ def get_solc(filename: str) -> Optional[Path]:
         return None
 
 
-def compile_source_project(is_optim):
+def compile_source_project(is_optimized: bool):
     # TODO two version: --optimize or not --optimize and store in different directory
     # TODO record error message in log directory.
     # TODO reformat opcode
@@ -108,10 +116,22 @@ def compile_source_project(is_optim):
         file_list = os.listdir(sub_dir)
         assert len(file_list) == 2
         source_file = os.path.join(sub_dir, project_name + '.sol')
-        save_dir = os.path.join(COMPILED_DIR, project_name)
+        log_dir = os.path.join(LOG_DIR, project_name + "_log")
+        solc_compiler = get_solc(source_file)
+        if is_optimized:
+            save_dir = os.path.join(COMPILED_DIR_OPT, project_name)
+            prefix = '--overwrite --opcodes --bin --bin-runtime --abi --asm-json --optimize'
+        else:
+            save_dir = os.path.join(COMPILED_DIR, project_name)
+            prefix = '--overwrite --opcodes --bin --bin-runtime --abi --asm-json'
         if not os.path.isdir(save_dir):
             os.mkdir(save_dir)
-        solc_compiler = get_solc(source_file)
-        prefix = '--overwrite --opcodes --bin --bin-runtime --abi --asm-json'
         cmd = '%s %s -o %s %s' % (solc_compiler, prefix, save_dir, source_file)
-        os.system(cmd)
+        os.system(cmd + "> " + log_dir + " 2>&1")
+
+def main():
+    compile_source_project(False)
+
+
+if __name__ == '__main__':
+    main()
