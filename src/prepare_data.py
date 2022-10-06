@@ -36,6 +36,9 @@ if not os.path.isdir(DATA_DIR):
     os.mkdir(DATA_DIR)
 
 
+OPCODE_SET = {"STOP", "ADD", "MUL", "SUB", "DIV", "SDIV", "MOD", "SMOD", "ADDMOD", "MULMOD", "EXP", "SIGNEXTEND", "LT", "GT", "SLT", "SGT", "EQ", "ISZERO", "AND", "OR", "EVMOR", "XOR", "NOT", "BYTE", "SHL", "SHR", "SAR", "SHA3", "ADDRESS", "BALANCE", "ORIGIN", "CALLER", "CALLVALUE", "CALLDATALOAD", "CALLDATASIZE", "CALLDATACOPY", "CODESIZE", "CODECOPY", "GASPRICE", "EXTCODESIZE", "EXTCODECOPY", "RETURNDATASIZE", "RETURNDATACOPY", "EXTCODEHASH", "BLOCKHASH", "COINBASE", "TIMESTAMP", "NUMBER", "DIFFICULTY", "GASLIMIT", "POP", "MLOAD", "MSTORE", "MSTORE8", "SLOAD", "SSTORE", "JUMP", "JUMPI", "PC", "MSIZE", "GAS", "JUMPDEST", "PUSH1", "PUSH2", "PUSH3", "PUSH4", "PUSH5", "PUSH6", "PUSH7", "PUSH8", "PUSH9", "PUSH10", "PUSH11", "PUSH12", "PUSH13", "PUSH14", "PUSH15", "PUSH16", "PUSH17", "PUSH18", "PUSH19", "PUSH20", "PUSH21", "PUSH22", "PUSH23", "PUSH24", "PUSH25", "PUSH26", "PUSH27", "PUSH28", "PUSH29", "PUSH30", "PUSH31", "PUSH32", "DUP1", "DUP2", "DUP3", "DUP4", "DUP5", "DUP6", "DUP7", "DUP8", "DUP9", "DUP10", "DUP11", "DUP12", "DUP13", "DUP14", "DUP15", "DUP16", "SWAP1", "SWAP2", "SWAP3", "SWAP4", "SWAP5", "SWAP6", "SWAP7", "SWAP8", "SWAP9", "SWAP10", "SWAP11", "SWAP12", "SWAP13", "SWAP14", "SWAP15", "SWAP16", "LOG0", "LOG1", "LOG2", "LOG3", "LOG4", "CREATE", "CALL", "CALLCODE", "RETURN", "DELEGATECALL", "CREATE2", "STATICCALL", "REVERT", "INVALID", "SELFDESTRUCT", "SUICIDE", "SELFBALANCE"}
+
+
 def remove_void(line):
     while m := VOID_START.search(line):
         if m[0] == '//':
@@ -133,6 +136,7 @@ def compile_source_project(is_optimized: bool):
         if not os.path.isdir(save_dir):
             os.mkdir(save_dir)
         cmd = '%s %s -o %s %s' % (solc_compiler, prefix, save_dir, source_file)
+
         process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         process.wait()
 
@@ -151,7 +155,28 @@ def compile_source_project(is_optimized: bool):
             csvwriter = csv.writer(csvfile)
             csvwriter.writerow(fields)
             csvwriter.writerow(row)
-
+        
+        format_opcode(save_dir)
+        
+        
+def format_opcode(save_dir):
+    for opcode_filename in os.listdir(save_dir):
+        if opcode_filename.endswith("opcode"):
+            fullPath = os.path.join(save_dir, opcode_filename)
+            f = open(fullPath, 'r')
+            for line in f:
+                formatted_opcode = open(fullPath, 'w')
+                hasfirstline = False
+                for opcode in line.split():
+                    if bool(hasfirstline): # line 1 has been written
+                        if opcode in OPCODE_SET:
+                            formatted_opcode.write('\n' + opcode + ' ')
+                        else:
+                            formatted_opcode.write(opcode + ' ')
+                    else: # No line has been written yet
+                        formatted_opcode.write(opcode + ' ')
+                        hasfirstline = True
+                        
 
 def main():
     compile_source_project(False)
