@@ -14,6 +14,8 @@ import seaborn as sns
 from sklearn.decomposition import PCA
 import pandas as pd
 from tqdm import tqdm
+import subprocess
+import csv
 
 # import adjustText
 
@@ -22,7 +24,7 @@ PRAGMA = re.compile('pragma solidity.*?;')
 QUOTE_END = re.compile("(?<!\\\\)'")
 DQUOTE_END = re.compile('(?<!\\\\)"')
 
-
+ORIG_DIR = './etherscan/'
 COMPILED_DIR = 'compile_output'
 COMPILED_DIR_OPT = 'compile_output_opt'
 LOG_DIR = 'log'
@@ -33,7 +35,9 @@ if not os.path.isdir(MODEL_WEIGHT):
 if not os.path.isdir(DATA_DIR):
     os.mkdir(DATA_DIR)
 
+
 OPCODE_SET = {"STOP", "ADD", "MUL", "SUB", "DIV", "SDIV", "MOD", "SMOD", "ADDMOD", "MULMOD", "EXP", "SIGNEXTEND", "LT", "GT", "SLT", "SGT", "EQ", "ISZERO", "AND", "OR", "EVMOR", "XOR", "NOT", "BYTE", "SHL", "SHR", "SAR", "SHA3", "ADDRESS", "BALANCE", "ORIGIN", "CALLER", "CALLVALUE", "CALLDATALOAD", "CALLDATASIZE", "CALLDATACOPY", "CODESIZE", "CODECOPY", "GASPRICE", "EXTCODESIZE", "EXTCODECOPY", "RETURNDATASIZE", "RETURNDATACOPY", "EXTCODEHASH", "BLOCKHASH", "COINBASE", "TIMESTAMP", "NUMBER", "DIFFICULTY", "GASLIMIT", "POP", "MLOAD", "MSTORE", "MSTORE8", "SLOAD", "SSTORE", "JUMP", "JUMPI", "PC", "MSIZE", "GAS", "JUMPDEST", "PUSH1", "PUSH2", "PUSH3", "PUSH4", "PUSH5", "PUSH6", "PUSH7", "PUSH8", "PUSH9", "PUSH10", "PUSH11", "PUSH12", "PUSH13", "PUSH14", "PUSH15", "PUSH16", "PUSH17", "PUSH18", "PUSH19", "PUSH20", "PUSH21", "PUSH22", "PUSH23", "PUSH24", "PUSH25", "PUSH26", "PUSH27", "PUSH28", "PUSH29", "PUSH30", "PUSH31", "PUSH32", "DUP1", "DUP2", "DUP3", "DUP4", "DUP5", "DUP6", "DUP7", "DUP8", "DUP9", "DUP10", "DUP11", "DUP12", "DUP13", "DUP14", "DUP15", "DUP16", "SWAP1", "SWAP2", "SWAP3", "SWAP4", "SWAP5", "SWAP6", "SWAP7", "SWAP8", "SWAP9", "SWAP10", "SWAP11", "SWAP12", "SWAP13", "SWAP14", "SWAP15", "SWAP16", "LOG0", "LOG1", "LOG2", "LOG3", "LOG4", "CREATE", "CALL", "CALLCODE", "RETURN", "DELEGATECALL", "CREATE2", "STATICCALL", "REVERT", "INVALID", "SELFDESTRUCT", "SUICIDE", "SELFBALANCE"}
+
 
 def remove_void(line):
     while m := VOID_START.search(line):
@@ -44,18 +48,19 @@ def remove_void(line):
             if end == -1:
                 return (line[:m.start()], True)
             else:
-                line = line[:m.start()] + line[end+2:]
+                line = line[:m.start()] + line[end + 2:]
                 continue
         if m[0] == '"':
             m2 = DQUOTE_END.search(line[m.end():])
-        else: # m[0] == "'":
+        else:  # m[0] == "'":
             m2 = QUOTE_END.search(line[m.end():])
         if m2:
-            line = line[:m.start()] + line[m.end()+m2.end():]
+            line = line[:m.start()] + line[m.end() + m2.end():]
             continue
         # we should not arrive here for a correct Solidity program
-        return (line[:m.start()], False)
-    return (line, False)
+        return line[:m.start()], False
+    return line, False
+
 
 def get_pragma(file: str) -> Optional[str]:
     in_comment = False
@@ -65,11 +70,12 @@ def get_pragma(file: str) -> Optional[str]:
             if end == -1:
                 continue
             else:
-                line = line[end+2:]
+                line = line[end + 2:]
         line, in_comment = remove_void(line)
         if m := PRAGMA.search(line):
             return m[0]
     return None
+
 
 def get_solc(filename: str) -> Optional[Path]:
     with open(filename) as f:
@@ -82,6 +88,7 @@ def get_solc(filename: str) -> Optional[Path]:
     except:
         return None
 
+
 from solcx.install import get_executable
 from solcx.install import install_solc_pragma
 
@@ -93,6 +100,7 @@ if not os.path.isdir(COMPILED_DIR_OPT):
 
 if not os.path.isdir(LOG_DIR):
     os.mkdir(LOG_DIR)
+
 
 def get_solc(filename: str) -> Optional[Path]:
     with open(filename) as f:
@@ -110,7 +118,7 @@ def compile_source_project(is_optimized: bool):
     # TODO two version: --optimize or not --optimize and store in different directory
     # TODO record error message in log directory.
     # TODO reformat opcode
-    ORIG_DIR = './etherscan/'
+
     for project_name in os.listdir(ORIG_DIR):
         sub_dir = os.path.join(ORIG_DIR, project_name)
         if os.path.isfile(sub_dir):
@@ -118,7 +126,6 @@ def compile_source_project(is_optimized: bool):
         file_list = os.listdir(sub_dir)
         assert len(file_list) == 2
         source_file = os.path.join(sub_dir, project_name + '.sol')
-        log_dir = os.path.join(LOG_DIR, project_name + "_log")
         solc_compiler = get_solc(source_file)
         if is_optimized:
             save_dir = os.path.join(COMPILED_DIR_OPT, project_name)
@@ -129,9 +136,28 @@ def compile_source_project(is_optimized: bool):
         if not os.path.isdir(save_dir):
             os.mkdir(save_dir)
         cmd = '%s %s -o %s %s' % (solc_compiler, prefix, save_dir, source_file)
-        os.system(cmd + "> " + log_dir + " 2>&1")
+
+        process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        process.wait()
+
+        log_dir_success = os.path.join(LOG_DIR, project_name + "_out.csv")
+        log_dir_error = os.path.join(LOG_DIR, project_name + "_err.csv")
+        fields = ['input', 'output', 'error']
+        if process.returncode == 0:
+            row = [source_file, save_dir, 'NONE']
+            filename = log_dir_success
+
+        else:
+            row = [source_file, save_dir, process.stderr.read()]
+            filename = log_dir_error
+
+        with open(filename, 'w') as csvfile:
+            csvwriter = csv.writer(csvfile)
+            csvwriter.writerow(fields)
+            csvwriter.writerow(row)
         
         format_opcode(save_dir)
+        
         
 def format_opcode(save_dir):
     for opcode_filename in os.listdir(save_dir):
@@ -150,6 +176,7 @@ def format_opcode(save_dir):
                     else: # No line has been written yet
                         formatted_opcode.write(opcode + ' ')
                         hasfirstline = True
+                        
 
 def main():
     compile_source_project(False)
