@@ -1,6 +1,5 @@
 import r2pipe
 import json
-import os
 
 if not os.path.isdir('/disk/CM/Project/SmartContract/Similarity/example/opcode/'):
     os.mkdir('/disk/CM/Project/SmartContract/Similarity/example/opcode/')
@@ -9,12 +8,6 @@ if not os.path.isdir('/disk/CM/Project/SmartContract/Similarity/example/opcode/i
 
 # TODO: write a function to reformat bin and bin-runtime
 # TODO: https://blog.positive.com/reversing-evm-bytecode-with-radare2-ab77247e5e53
-def convert_bin(project, file):
-    bin_file = f'./compile_output/{project}/{file}'
-    if os.path.isfile(bin_file) and os.access(bin_file, os.R_OK):
-        os.system(f'rax2 -s < compile_output/{project}/{file} > compile_output/{project}/{file}.bin')
-    else:
-        print(f'{bin_file} not found')
 
 cnt = 0
 for binary_path in os.listdir('/disk/CM/Project/SmartContract/Similarity/example/bin'):
