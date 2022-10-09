@@ -5,21 +5,21 @@ import os
 import re
 from   pathlib import Path
 from   typing import Optional
-#import solcx
+import solcx
 from   random import sample
-#import gensim
-#from   gensim.models.doc2vec import TaggedLineDocument
-#from   gensim.models.doc2vec import TaggedDocument
-#import torch
+import gensim
+from   gensim.models.doc2vec import TaggedLineDocument
+from   gensim.models.doc2vec import TaggedDocument
+import torch
 import random
-#import matplotlib.pyplot as plt
-#import seaborn as sns
-#from   sklearn.decomposition import PCA
-#import pandas as pd
-#from   tqdm import tqdm
+import matplotlib.pyplot as plt
+import seaborn as sns
+from   sklearn.decomposition import PCA
+import pandas as pd
+from   tqdm import tqdm
 import subprocess
 import csv
-#import adjustText
+import adjustText
 from   typing import Dict
 
 Dict = {
