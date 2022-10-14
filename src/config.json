@@ -2,5 +2,6 @@
     "ORIG_DIR": "./etherscan/",
     "COMPILED_DIR": "./compile_output/",
     "COMPILED_DIR_OPT": "./compile_output_opt/",
-    "LOG_DIR": "./log/"
+    "LOG_DIR": "./log/",
+    "OPCODE_DIR": "./opcode/instruction/"
 }
