@@ -6,13 +6,13 @@ from solcx.install import get_executable
 from solcx.install import install_solc_pragma
 import subprocess
 import csv
-import json
-from random import sample
 import gensim
 from gensim.models.doc2vec import TaggedLineDocument
 from gensim.models.doc2vec import TaggedDocument
-import torch
 import random
+import json
+from random import sample
+import torch
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.decomposition import PCA
@@ -150,6 +150,7 @@ class SmartContract:
                         else:  # No line has been written yet
                             formatted_opcode.write(opcode + ' ')
                             has_first_line = True
+                f.close()
 
     def log_message(self, process, save_dir):
         log_dir_success = os.path.join(self.config['LOG_DIR'], self.proj_name + "_out.csv")
@@ -172,9 +173,8 @@ class SmartContract:
         pass
 
     def convert_bin(self):
-        proj_path = Dict["proj_path"]
-        save_path = Dict["save_path"]
-        bin_file = f'{proj_path}/{save_path}/{Dict["bin_file"]}'
+        save_path = self.config['COMPILED_DIR']
+        bin_file = f'{self.proj_name}/{save_path}/{Dict["bin_file"]}'
         if os.path.isfile(bin_file) and os.access(bin_file, os.R_OK):
             os.system(f'rax2 -s < {bin_file} > {bin_file}.bin')
         else:
@@ -182,3 +182,40 @@ class SmartContract:
 
     def save_opcode(self):
         pass
+
+    def preprocess(self, inst_path):
+        f = open(os.path.join(self.config['OPCODE_DIR'], inst_path), 'r')
+        inst = f.readlines()
+        f.close()
+        return inst
+
+    # IN PROGRESS
+    def asm2vec(self):
+        # dm=1 means ‘distributed memory’ (PV-DM)
+        # dm =0 means ‘distributed bag of words’ (PV-DBOW)
+        model = gensim.models.doc2vec.Doc2Vec(dm=0)
+        instructions = [self.preprocess(d) for d in os.listdir(self.config['OPCODE_DIR'])]
+        sentences = [TaggedDocument(l, [i]) for i, l in enumerate(instructions)]
+
+        random.shuffle(sentences)
+
+        print(sentences)
+
+        model.build_vocab(sentences)
+        model.train(sentences, total_examples=model.corpus_count, epochs=10)
+
+        func_vec = model.dv.vectors
+        print(func_vec)
+
+        if not os.path.isdir('../model_weight'):
+            os.mkdir('../model_weight')
+        torch.save(model, '../model_weight/doc2vec.pt')
+
+        # load the model
+        model = torch.load('../model_weight/doc2vec.pt')
+
+        new_instructions = [self.preprocess(d) for d in os.listdir(self.config['OPCODE_DIR'])]
+
+        new_vec = model.infer_vector(new_instructions[0])
+        res = model.dv.similar_by_vector(new_vec, topn=1)
+        print(res)
