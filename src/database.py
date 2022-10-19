@@ -16,4 +16,5 @@ class Database:
             assert len(file_list) == 2
             source_file = os.path.join(sub_dir, project_name + '.sol')
             sc = SmartContract(source_file, project_name, self.config)
-            sc.asm2vec()
+            sc.train_model()
+            sc.test_model(5)
