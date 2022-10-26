@@ -15,6 +15,4 @@ class Database:
             file_list = os.listdir(sub_dir)
             assert len(file_list) == 2
             source_file = os.path.join(sub_dir, project_name + '.sol')
-            sc = SmartContract(source_file, project_name, self.config)
-            sc.train_model()
-            sc.test_model(5)
+            SmartContract(source_file, project_name, self.config)

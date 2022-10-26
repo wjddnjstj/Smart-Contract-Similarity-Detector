@@ -6,18 +6,6 @@ from solcx.install import get_executable
 from solcx.install import install_solc_pragma
 import subprocess
 import csv
-import gensim
-from gensim.models.doc2vec import TaggedLineDocument
-from gensim.models.doc2vec import TaggedDocument
-import random
-import torch
-from tqdm import tqdm
-import json
-from random import sample
-import matplotlib.pyplot as plt
-import seaborn as sns
-from sklearn.decomposition import PCA
-import pandas as pd
 
 
 class SmartContract:
@@ -45,7 +33,7 @@ class SmartContract:
         self.proj_name = proj_name
         self.config = config
 
-        self.convert_source_opcode(True)
+        self.convert_source_opcode(self.config['IS_OPTIMIZED'])
         # decide the type of file_name
 
     def remove_void(self, line):
@@ -169,6 +157,9 @@ class SmartContract:
             csvwriter.writerow(fields)
             csvwriter.writerow(row)
 
+    def save_opcode(self):
+        pass
+
     def convert_binary_opcode(self):
         pass
 
@@ -179,60 +170,3 @@ class SmartContract:
             os.system(f'rax2 -s < {bin_file} > {bin_file}.bin')
         else:
             print(f'{bin_file} not found')
-
-    def save_opcode(self):
-        pass
-
-    @staticmethod
-    def preprocess(inst_path, data_dir):
-        f = open(os.path.join(data_dir, inst_path), 'r')
-        inst = f.readlines()
-        f.close()
-        return inst
-
-    def load_data(self, data_dir):
-        instructions = [self.preprocess(d, data_dir) for d in os.listdir(data_dir)]
-        sentences = [TaggedDocument(l, [i]) for i, l in enumerate(instructions)]
-        random.shuffle(sentences)
-        return sentences
-
-    # IN PROGRESS
-    def train_model(self):
-        sentences = self.load_data(self.config['OPCODE_TRAINING_DIR'])
-        # dm = 1 means ‘distributed memory’ (PV-DM)
-        # dm = 0 means ‘distributed bag of words’ (PV-DBOW)
-        model = gensim.models.doc2vec.Doc2Vec(dm=0)
-        model.build_vocab(sentences)
-        model.train(sentences, total_examples=model.corpus_count, epochs=10)
-
-        func_vec = model.dv.vectors
-        print(func_vec)
-
-        if not os.path.isdir(self.config['MODEL_DIR']):
-            os.mkdir(self.config['MODEL_DIR'])
-        torch.save(model, self.config['MODEL_DIR'] + 'doc2vec.pt')
-
-    # IN PROGRESS
-    def test_model(self, top_K):
-        def compute_sim(op1, op2):
-            min_len = min(len(op1), len(op2))
-            op1, op2 = op1[:min_len], op2[:min_len]
-            c, s = 0, 0
-            for i1, i2 in zip(op1, op2):
-                if len(i1) < 10:
-                    c += 1
-                    if i1 == i2:
-                        s += 1
-            return s / c
-
-        test_data = self.load_data(self.config['OPCODE_TESTING_DIR'])
-        model = torch.load(self.config['MODEL_DIR'] + 'doc2vec.pt')
-        opcode_sim = 0
-        for data in tqdm(test_data):
-            new_vec = model.infer_vector(data[0])
-            # Find the top-N most similar words by vector.
-            res = model.dv.similar_by_vector(new_vec, topn=top_K)
-            print(res)
-
-            opcode_sim += max([compute_sim(data[0], d[0]) for d in self.load_data(self.config['OPCODE_TRAINING_DIR'])])
-        print(opcode_sim, opcode_sim / len(test_data))
