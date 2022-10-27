@@ -120,9 +120,17 @@ class SmartContract:
         process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         process.wait()
 
+        self.remove_empty_files(save_dir)
         self.format_opcode(save_dir)
         self.log_message(process, save_dir)
         self.save_opcode(save_dir, self.proj_name)
+
+    @staticmethod
+    def remove_empty_files(dir_name):
+        for file in os.listdir(dir_name):
+            full_path = os.path.join(dir_name, file)
+            if os.stat(full_path).st_size == 0:
+                os.remove(full_path)
 
     def format_opcode(self, dir_name):
         for opcode_filename in os.listdir(dir_name):
