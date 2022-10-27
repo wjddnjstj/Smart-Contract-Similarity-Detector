@@ -2,6 +2,7 @@ import os, re
 from pathlib import Path
 from typing import Optional
 import solcx
+import shutil
 from solcx.install import get_executable
 from solcx.install import install_solc_pragma
 import subprocess
@@ -83,6 +84,7 @@ class SmartContract:
         except:
             return None
 
+# Ask Simin why we need two (what the difference is between the two get_solc functions)
     def get_solc(self, filename: str) -> Optional[Path]:
         with open(filename) as f:
             file = f.read()
@@ -120,6 +122,7 @@ class SmartContract:
 
         self.format_opcode(save_dir)
         self.log_message(process, save_dir)
+        self.save_opcode(save_dir, self.proj_name)
 
     def format_opcode(self, dir_name):
         for opcode_filename in os.listdir(dir_name):
@@ -157,8 +160,21 @@ class SmartContract:
             csvwriter.writerow(fields)
             csvwriter.writerow(row)
 
-    def save_opcode(self):
-        pass
+    def save_opcode(self, src_dirname, proj_name):
+        if not os.path.isdir(self.config['REPO_PROJ_DIR']):
+            os.mkdir(self.config['REPO_PROJ_DIR'])
+
+        target_dir = os.path.join(self.config['REPO_PROJ_DIR'], proj_name)
+        if not os.path.isdir(target_dir):
+            os.mkdir(target_dir)
+
+        for file in os.listdir(src_dirname):
+            if file.endswith("opcode"):
+                source_full_path = os.path.join(src_dirname, file)
+                target_full_path = os.path.join(target_dir, file)
+                shutil.move(source_full_path, target_full_path)
+            else:
+                continue
 
     def convert_binary_opcode(self):
         pass
