@@ -1,46 +1,87 @@
-import r2pipe
-import json
+import re
 import os
+import r2pipe
+import hashlib
 
-if not os.path.isdir('/disk/CM/Project/SmartContract/Similarity/example/opcode/'):
-    os.mkdir('/disk/CM/Project/SmartContract/Similarity/example/opcode/')
-if not os.path.isdir('/disk/CM/Project/SmartContract/Similarity/example/opcode/instruction'):
-    os.mkdir('/disk/CM/Project/SmartContract/Similarity/example/opcode/instruction')
 
-# TODO: write a function to reformat bin and bin-runtime
-# TODO: https://blog.positive.com/reversing-evm-bytecode-with-radare2-ab77247e5e53
-def convert_bin(proj, file):
-    bin_file = f'./{proj}/contract_out/{file}'
-    if os.path.isfile(bin_file) and os.access(bin_file, os.R_OK):
-        os.system(f'rax2 -s < {bin_file} > {bin_file}.bin')
+def sha3(data):
+    return hashlib.sha3_256(data.encode()).hexdigest()
+
+
+def normalize(opcode):
+    opcode = opcode.replace(' - ', ' + ')
+    opcode = re.sub(r'0x[0-9a-f]+', 'CONST', opcode)
+    opcode = re.sub(r'\*[0-9]', '*CONST', opcode)
+    opcode = re.sub(r' [0-9]', ' CONST', opcode)
+    return opcode
+
+
+def fn2asm(pdf, min_len):
+    # check
+    if pdf is None:
+        return
+    if len(pdf[
+               'ops']) < min_len:
+        return
+    if 'invalid' in [op['type'] for op in pdf['ops']]:
+        return
+
+    ops = pdf['ops']
+
+    # set label
+    labels, scope = {}, [op['offset'] for op in ops]
+    assert (None not in scope)
+    for i, op in enumerate(ops):
+        if op.get('jump') in scope:
+            labels.setdefault(op.get('jump'), i)
+
+    # dump output
+    output = ''
+    for op in ops:
+        # add label
+        if labels.get(op.get('offset')) is not None:
+            output += f'LABEL{labels[op["offset"]]}:\n'
+        # add instruction
+        if labels.get(op.get('jump')) is not None:
+            output += f' {op["type"]} LABEL{labels[op["jump"]]}\n'
+        else:
+            output += f' {normalize(op["opcode"])}\n'
+
+    return output
+
+
+def convert(filename, opath):
+    r = r2pipe.open(filename)
+    r.cmd('aaaa')
+
+    count = 0
+
+    for fn in r.cmdj('aflj'):
+        r.cmd(f's {fn["offset"]}')
+        asm = fn2asm(r.cmdj('pdfj'), 10)
+        if asm:
+            uid = sha3(asm)
+            asm = f''' .name {fn["name"]}.offset {fn["offset"]:016x}.file {filename} ''' + asm
+            with open(opath + uid, 'w') as f:
+                f.write(asm)
+                count += 1
+
+    return count
+
+
+def bin2asm(config):
+    f_count, b_count = 0, 0
+
+    bin_dir = config['BIN_PROJ_DIR']
+    asm_dir = config['ASM_PROJ_DIR']
+    if not os.path.isdir(asm_dir):
+        os.mkdir(asm_dir)
+
+    if os.path.isdir(bin_dir):
+        for f in os.listdir(bin_dir):
+            f_count += convert(os.path.join(bin_dir, f), asm_dir)
+            b_count += 1
     else:
-	print(f'{bin_file} not found')
-		
+        print(f'[Error] No such file or directory')
 
-cnt = 0
-for binary_path in os.listdir('/disk/CM/Project/SmartContract/Similarity/example/bin'):
-    binary_path = os.path.join('/disk/CM/Project/SmartContract/Similarity/example/bin', binary_path)
-    r2 = r2pipe.open(binary_path, flags=['-a', 'evm'])
-    r2.cmd('aaa')   # anlysis all
-    try:
-        funcs = json.loads(r2.cmd('aflj'))   # list all functions
-        func_list = []
-        ass_list = []
-        for func in funcs:
-            func_name = func['name']
-            func_list.append(func_name)
-            r2.cmd('s ' + func_name)    # move to the function start address
-            cfg = r2.cmdj("agj")     # get the controal flow graph
-            instruction = r2.cmdj("pdj")  # get list of instructions.
-            if len(cfg):
-                instance = (instruction, cfg, func_name) # project name, contract name, function name
-                ass_list.append(instance)
-            instruction_path = '/disk/CM/Project/SmartContract/Similarity/example/opcode/instruction/%d.txt' % cnt
-            cnt += 1
-            f = open(instruction_path, 'w')
-            inst = [i['opcode'] + '\n' for i in instruction if 'opcode' in i]
-            f.writelines(inst)
-            f.close()
-    except:
-        print('error')
-
+    print(f'[+] Total scan binary: {b_count} => Total generated assembly functions: {f_count}')
