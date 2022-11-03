@@ -38,13 +38,13 @@ def train_model(config: dict):
     model.build_vocab(sentences)
     model.train(sentences, total_examples=model.corpus_count, epochs=10)
 
-    if not os.path.isdir(config['MODEL_DIR']):
-        os.mkdir(config['MODEL_DIR'])
-    torch.save(model, config['MODEL_DIR'] + 'doc2vec.pt')
+    if not os.path.isdir(config['MODEL_DIR_DOC2VEC']):
+        os.mkdir(config['MODEL_DIR_DOC2VEC'])
+    torch.save(model, config['MODEL_DIR_DOC2VEC'] + 'doc2vec.pt')
 
 
 def compare_sim(config: dict):
-    model = torch.load(config['MODEL_DIR'] + 'doc2vec.pt')
+    model = torch.load(config['MODEL_DIR_DOC2VEC'] + 'doc2vec.pt')
     target_dir = config['TARGET_PROJ_DIR']
     repo_dir = config['REPO_PROJ_DIR']
     for target in os.listdir(target_dir):

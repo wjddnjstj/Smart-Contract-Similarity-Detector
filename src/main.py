@@ -1,6 +1,8 @@
 from database import Database
 import json
-import doc2vec
+import utils
+import doc2vec_imp
+import asm2vec_imp
 
 
 def main():
@@ -8,14 +10,16 @@ def main():
     config_dic = json.load(f_config)
     f_config.close()
 
-    db = Database(config_dic)
-    db.scan_files()
-
     if config_dic['ASM_2_VEC']:
-        pass
+        utils.bin2asm(config_dic)
+        asm2vec_imp.train(config_dic)
+        asm2vec_imp.test(config_dic)
+        asm2vec_imp.compare_sim(config_dic)
     else:
-        doc2vec.train_model(config_dic)
-        doc2vec.compare_sim(config_dic)
+        db = Database(config_dic)
+        db.scan_files()
+        doc2vec_imp.train_model(config_dic)
+        doc2vec_imp.compare_sim(config_dic)
 
 
 if __name__ == '__main__':

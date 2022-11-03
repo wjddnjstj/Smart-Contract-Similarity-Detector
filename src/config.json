@@ -2,10 +2,24 @@
     "ORIG_DIR": "./etherscan/",
     "COMPILED_DIR": "./compile_output/",
     "COMPILED_DIR_OPT": "./compile_output_opt/",
+    "IS_OPTIMIZED": true,
     "LOG_DIR": "./log/",
     "REPO_PROJ_DIR": "./opcode/",
     "TARGET_PROJ_DIR": "./target/",
-    "MODEL_DIR": "./model/",
-    "ASM_2_VEC": false,
-    "IS_OPTIMIZED": true
+    "MODEL_DIR_DOC2VEC": "./model_doc2vec/",
+    "MODEL_DIR_ASM2VEC": "./model_asm2vec/",
+    "BIN_PROJ_DIR": "./bin_code/",
+    "ASM_PROJ_DIR": "./asm_code/",
+    "ASM_2_VEC": true,
+    "ASM_CONFIG": {
+        "DEVICE": "auto",
+        "LIMIT": 1000,
+        "EMBEDDING_SIZE": 100,
+        "BATCH_SIZE": 1024,
+        "EPOCHS": 10,
+        "NEG_SAMPLE_NUM": 25,
+        "CALC_ACC": true,
+        "LEARNING_RATE": 0.02,
+        "TARGET_PROJ_DIR": "./target_asm_code/"
+    }
 }
