@@ -1,3 +1,4 @@
+import os
 from database import Database
 import json
 import utils
@@ -12,8 +13,15 @@ def main():
 
     if config_dic['ASM_2_VEC']:
         utils.bin2asm(config_dic)
-        asm2vec_imp.train(config_dic)
-        asm2vec_imp.test(config_dic)
+
+        asm_dir = config_dic['ASM_REPO_DIR']
+        for proj in os.listdir(asm_dir):
+            asm2vec_imp.train(config_dic, os.path.join(asm_dir, proj))
+
+        target_dir = config_dic['ASM_CONFIG']['TARGET_PROJ_DIR']
+        for tp in os.listdir(target_dir):
+            asm2vec_imp.test(config_dic, os.path.join(asm_dir, tp))
+
         asm2vec_imp.compare_sim(config_dic)
     else:
         db = Database(config_dic)
