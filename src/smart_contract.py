@@ -124,6 +124,7 @@ class SmartContract:
         self.format_opcode(save_dir)
         self.log_message(process, save_dir)
         self.save_opcode(save_dir, self.proj_name)
+        self.save_bin_code(save_dir, self.proj_name)
 
     @staticmethod
     def remove_empty_files(dir_name):
@@ -169,28 +170,33 @@ class SmartContract:
             csvwriter.writerow(row)
 
     def save_opcode(self, src_dirname, proj_name):
-        if not os.path.isdir(self.config['REPO_PROJ_DIR']):
-            os.mkdir(self.config['REPO_PROJ_DIR'])
+        if not os.path.isdir(self.config['OPCODE_REPO_DIR']):
+            os.mkdir(self.config['OPCODE_REPO_DIR'])
 
-        target_dir = os.path.join(self.config['REPO_PROJ_DIR'], proj_name)
-        if not os.path.isdir(target_dir):
-            os.mkdir(target_dir)
+        opcode_dir = os.path.join(self.config['OPCODE_REPO_DIR'], proj_name)
+        if not os.path.isdir(opcode_dir):
+            os.mkdir(opcode_dir)
 
         for file in os.listdir(src_dirname):
             if file.endswith("opcode"):
                 source_full_path = os.path.join(src_dirname, file)
-                target_full_path = os.path.join(target_dir, file)
+                target_full_path = os.path.join(opcode_dir, file)
                 shutil.move(source_full_path, target_full_path)
             else:
                 continue
 
-    def convert_binary_opcode(self):
-        pass
+    def save_bin_code(self, src_dirname, proj_name):
+        if not os.path.isdir(self.config['BIN_REPO_DIR']):
+            os.mkdir(self.config['BIN_REPO_DIR'])
 
-    def convert_bin(self):
-        save_path = self.config['COMPILED_DIR']
-        bin_file = f'{self.proj_name}/{save_path}/{Dict["bin_file"]}'
-        if os.path.isfile(bin_file) and os.access(bin_file, os.R_OK):
-            os.system(f'rax2 -s < {bin_file} > {bin_file}.bin')
-        else:
-            print(f'{bin_file} not found')
+        bin_dir = os.path.join(self.config['BIN_REPO_DIR'], proj_name)
+        if not os.path.isdir(bin_dir):
+            os.mkdir(bin_dir)
+
+        for file in os.listdir(src_dirname):
+            if file.endswith("bin"):
+                source_full_path = os.path.join(src_dirname, file)
+                target_full_path = os.path.join(bin_dir, file)
+                shutil.move(source_full_path, target_full_path)
+            else:
+                continue

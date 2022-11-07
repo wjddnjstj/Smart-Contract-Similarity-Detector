@@ -29,7 +29,7 @@ def load_data(data_dir):
 
 def train_model(config: dict):
     sentences = []
-    op_dir = config['REPO_PROJ_DIR']
+    op_dir = config['OPCODE_REPO_DIR']
     for proj in os.listdir(op_dir):
         sentences += load_data(os.path.join(op_dir, proj))
     # dm = 1 means ‘distributed memory’ (PV-DM)
@@ -46,13 +46,13 @@ def train_model(config: dict):
 def compare_sim(config: dict):
     model = torch.load(config['MODEL_DIR_DOC2VEC'] + 'doc2vec.pt')
     target_dir = config['TARGET_PROJ_DIR']
-    repo_dir = config['REPO_PROJ_DIR']
+    repo_dir = config['OPCODE_REPO_DIR']
     for target in os.listdir(target_dir):
         for source in os.listdir(repo_dir):
-            compare_proj_sim(os.path.join(target_dir, target), os.path.join(repo_dir, source), model)
+            compare_contract_sim(os.path.join(target_dir, target), os.path.join(repo_dir, source), model)
 
 
-def compare_proj_sim(target, source, model):
+def compare_contract_sim(target, source, model):
     print('=========================================')
     total_func_sim = 0
     tp = target.rsplit('/', 1)[-1]

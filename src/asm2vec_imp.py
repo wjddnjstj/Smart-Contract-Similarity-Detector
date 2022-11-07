@@ -3,12 +3,19 @@ import torch
 import asm2vec
 
 
-def train(config):
+def train(config, proj):
     if config['ASM_CONFIG']['DEVICE'] == 'auto':
         device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-    model = None
-    functions, tokens = asm2vec.utils.load_data(config['ASM_PROJ_DIR'], limit=config['ASM_CONFIG']['LIMIT'])
+    mpath = config['MODEL_DIR_ASM2VEC'] + 'asm2vec.pt'
+    if os.path.exists(mpath):
+        model, tokens = asm2vec.utils.load_model(mpath, device=device)
+        functions, tokens_new = asm2vec.utils.load_data(proj, limit=config['ASM_CONFIG']['LIMIT'])
+        tokens.update(tokens_new)
+        model.update(len(functions), tokens.size())
+    else:
+        model = None
+        functions, tokens = asm2vec.utils.load_data(proj, limit=config['ASM_CONFIG']['LIMIT'])
 
     opath = config['MODEL_DIR_ASM2VEC']
     if not os.path.isdir(opath):
@@ -35,16 +42,17 @@ def train(config):
     )
 
 
-def test(config):
+def test(config, target_proj):
+    print('====================================================')
+    tp = target_proj.rsplit('/', 1)[-1]
+    print('target project: ', tp)
     if config['ASM_CONFIG']['DEVICE'] == 'auto':
         device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
     # load asm2vec model, tokens
-    target_dir = config['ASM_CONFIG']['TARGET_PROJ_DIR']
-    for tp in os.listdir(target_dir):
-        print('====================================================')
+    for tc in os.listdir(target_proj):
         model, tokens = asm2vec.utils.load_model(config['MODEL_DIR_ASM2VEC'] + 'asm2vec.pt', device=device)
-        functions, tokens_new = asm2vec.utils.load_data(os.path.join(target_dir, tp))
+        functions, tokens_new = asm2vec.utils.load_data(os.path.join(target_proj, tc))
         tokens.update(tokens_new)
         model.update(1, tokens.size())
         model = model.to(device)
@@ -64,22 +72,34 @@ def test(config):
         # show predicted probability results
         x, y = asm2vec.utils.preprocess(functions, tokens)
         probs = model.predict(x.to(device), y.to(device))
-        print('target project: ', tp)
+        print('target contract: ', tc)
         asm2vec.utils.show_probs(x, y, probs, tokens, limit=config['ASM_CONFIG']['LIMIT'], pretty=True)
-        print('====================================================')
+    print('====================================================')
 
 
 def compare_sim(config):
-    if config['ASM_CONFIG']['DEVICE'] == 'auto':
-        device = 'cuda' if torch.cuda.is_available() else 'cpu'
-
-    repo_dir = config['ASM_PROJ_DIR']
+    repo_dir = config['ASM_REPO_DIR']
     target_dir = config['ASM_CONFIG']['TARGET_PROJ_DIR']
     for tp in os.listdir(target_dir):
         for rp in os.listdir(repo_dir):
-            print('====================================================')
+            compare_contract_sim(os.path.join(target_dir, tp), os.path.join(repo_dir, rp), config)
+
+
+def compare_contract_sim(target, source, config):
+    if config['ASM_CONFIG']['DEVICE'] == 'auto':
+        device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+    print('====================================================')
+    total_contract_sim = 0
+    tp = target.rsplit('/', 1)[-1]
+    rp = source.rsplit('/', 1)[-1]
+    print('target project: ', tp)
+    print('repo project: ', rp)
+    for tc in os.listdir(target):
+        max_contract_sim = 0
+        for rc in os.listdir(source):
             model, tokens = asm2vec.utils.load_model(config['MODEL_DIR_ASM2VEC'] + 'asm2vec.pt', device=device)
-            functions, tokens_new = asm2vec.utils.load_data([os.path.join(target_dir, tp), os.path.join(repo_dir, rp)])
+            functions, tokens_new = asm2vec.utils.load_data([os.path.join(target, tc), os.path.join(source, rc)])
             tokens.update(tokens_new)
             model.update(2, tokens.size())
             model = model.to(device)
@@ -97,14 +117,13 @@ def compare_sim(config):
 
             # compare 2 function vectors
             v1, v2 = model.to('cpu').embeddings_f(torch.tensor([0, 1]))
-
-            print('target project: ', tp)
-            print('repo project: ', rp)
-            print(f'cosine similarity : {cosine_similarity(v1, v2):.6f}')
-            print('====================================================')
+            sim = cosine_similarity(v1, v2)
+            max_contract_sim = max(max_contract_sim, sim)
+            print('sim("{}", "{}") = {}'.format(tc, rc, sim))
+        total_contract_sim += max_contract_sim
+    print('sim("{}", "{}") = {}'.format(tp, rp, total_contract_sim / len(os.listdir(target))))
+    print('====================================================')
 
 
 def cosine_similarity(v1, v2):
     return (v1 @ v2 / (v1.norm() * v2.norm())).item()
-
-
