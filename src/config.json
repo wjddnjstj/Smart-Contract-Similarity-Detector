@@ -1,23 +1,32 @@
 {
-    "ORIG_DIR": "./etherscan/",
-    "COMPILED_DIR": "./compile_output/",
-    "COMPILED_DIR_OPT": "./compile_output_opt/",
-    "IS_OPTIMIZED": false,
+    "SRC_CONFIG": {
+        "CONTRACTS": "./contracts/",
+        "BLACK_LIST": "./settings/black.list",
+        "WHITE_LIST": "./settings/white.list"
+    },
+    "TRAINING_SET": "./training_set/",
+    "TESTING_SET": "./testing_set/",
     "LOG_DIR": "./log/",
-    "OPCODE_REPO_DIR": "./opcode/",
-    "BIN_REPO_DIR": "./bin_code/",
-    "TARGET_PROJ_DIR": "./target/",
+    "OUT": "./out/",
+    "OPCODE": "./opcode/",
+    "BIN": "./bin/",
+    "ASM": "./asm/",
+    "DATA": {
+        "TRAINING_DIR": "training",
+        "TRAINING_DIR_OPT": "training_opt",
+        "TESTING_DIR": "testing",
+        "TESTING_DIR_OPT": "testing_opt"
+    },
     "MODEL_DIR_DOC2VEC": "./model_doc2vec/",
     "MODEL_DIR_ASM2VEC": "./model_asm2vec/",
-    "ASM_REPO_DIR": "./asm_code/",
     "ASM_2_VEC": true,
     "ASM_CONFIG": {
         "DEVICE": "auto",
-        "LIMIT": 1000,
+        "LIMIT": 10000,
         "EMBEDDING_SIZE": 100,
-        "BATCH_SIZE": 1024,
+        "BATCH_SIZE": 4096,
         "EPOCHS": 10,
-        "NEG_SAMPLE_NUM": 25,
+        "NEG_SAMPLE_NUM": 100,
         "CALC_ACC": true,
         "LEARNING_RATE": 0.02,
         "TARGET_PROJ_DIR": "./target_asm_code/"

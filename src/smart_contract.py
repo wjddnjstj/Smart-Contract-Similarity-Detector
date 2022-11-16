@@ -29,13 +29,13 @@ class SmartContract:
                   "LOG1", "LOG2", "LOG3", "LOG4", "CREATE", "CALL", "CALLCODE", "RETURN", "DELEGATECALL", "CREATE2",
                   "STATICCALL", "REVERT", "INVALID", "SELFDESTRUCT", "SUICIDE", "SELFBALANCE"}
 
-    def __init__(self, file_name: str, proj_name: str, config: dict):
+    def __init__(self, file_name: str, proj_name: str, proj_dir, config: dict):
         self.file_name = file_name
         self.proj_name = proj_name
+        self.proj_dir = proj_dir
         self.config = config
 
-        self.convert_source_opcode(self.config['IS_OPTIMIZED'])
-        # decide the type of file_name
+        self.compile_contract()
 
     def remove_void(self, line):
         while m := re.compile('//|/\*|"|\'').search(line):
@@ -96,35 +96,64 @@ class SmartContract:
         except:
             return None
 
-    def convert_source_opcode(self, is_optimized: bool):
-        if not os.path.isdir(self.config['COMPILED_DIR']):
-            os.mkdir(self.config['COMPILED_DIR'])
+    def post_compilation(self, save, process):
+        self.remove_empty_files(save)
+        self.format_opcode(save)
+        self.log_message(process, save)
 
-        if not os.path.isdir(self.config['COMPILED_DIR_OPT']):
-            os.mkdir(self.config['COMPILED_DIR_OPT'])
-
-        if not os.path.isdir(self.config['LOG_DIR']):
-            os.mkdir(self.config['LOG_DIR'])
-
+    def exe_command(self, save, cmd):
         solc_compiler = self.get_solc(self.file_name)
-        if is_optimized:
-            save_dir = os.path.join(self.config['COMPILED_DIR_OPT'], self.proj_name)
-            prefix = '--overwrite --opcodes --bin --bin-runtime --abi --asm-json --optimize'
-        else:
-            save_dir = os.path.join(self.config['COMPILED_DIR'], self.proj_name)
-            prefix = '--overwrite --opcodes --bin --bin-runtime --abi --asm-json'
-        if not os.path.isdir(save_dir):
-            os.mkdir(save_dir)
-        cmd = '%s %s -o %s %s' % (solc_compiler, prefix, save_dir, self.file_name)
-
+        if not os.path.isdir(save):
+            os.mkdir(save)
+        cmd = '%s %s -o %s %s' % (solc_compiler, cmd, save, self.file_name)
         process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         process.wait()
+        print("Compiling project" + save + "...")
+        self.post_compilation(save, process)
 
-        self.remove_empty_files(save_dir)
-        self.format_opcode(save_dir)
-        self.log_message(process, save_dir)
-        self.save_opcode(save_dir, self.proj_name)
-        self.save_bin_code(save_dir, self.proj_name)
+    def compile_contract(self):
+        if self.proj_dir == self.config['TRAINING_SET']:
+            out_dir = os.path.join(self.config['OUT'], self.config['DATA']['TRAINING_DIR'])
+            out_dir_opt = os.path.join(self.config['OUT'], self.config['DATA']['TRAINING_DIR_OPT'])
+            opcode_dir = os.path.join(self.config['OPCODE'], self.config["DATA"]["TRAINING_DIR"])
+            opcode_dir_opt = os.path.join(self.config['OPCODE'], self.config["DATA"]["TRAINING_DIR_OPT"])
+            bin_dir = os.path.join(self.config['BIN'], self.config["DATA"]["TRAINING_DIR"])
+            bin_dir_opt = os.path.join(self.config['BIN'], self.config["DATA"]["TRAINING_DIR_OPT"])
+        else:
+            out_dir = os.path.join(self.config['OUT'], self.config['DATA']['TESTING_DIR'])
+            out_dir_opt = os.path.join(self.config['OUT'], self.config['DATA']['TESTING_DIR_OPT'])
+            opcode_dir = os.path.join(self.config['OPCODE'], self.config["DATA"]["TESTING_DIR"])
+            opcode_dir_opt = os.path.join(self.config['OPCODE'], self.config["DATA"]["TESTING_DIR_OPT"])
+            bin_dir = os.path.join(self.config['BIN'], self.config["DATA"]["TESTING_DIR"])
+            bin_dir_opt = os.path.join(self.config['BIN'], self.config["DATA"]["TESTING_DIR_OPT"])
+
+        save_dir = os.path.join(out_dir, self.proj_name)
+        prefix = '--overwrite --opcodes --bin'
+        self.exe_command(save_dir, prefix)
+
+        opcode_dir = os.path.join(opcode_dir, self.proj_name)
+        if not os.path.isdir(opcode_dir):
+            os.mkdir(opcode_dir)
+        self.save_opcode(save_dir, opcode_dir)
+
+        bin_dir = os.path.join(bin_dir, self.proj_name)
+        if not os.path.isdir(bin_dir):
+            os.mkdir(bin_dir)
+        self.save_bin_code(save_dir, bin_dir)
+
+        save_dir_opt = os.path.join(out_dir_opt, self.proj_name + '_opt')
+        prefix_opt = '--overwrite --opcodes --bin --optimize'
+        self.exe_command(save_dir_opt, prefix_opt)
+
+        opcode_dir_opt = os.path.join(opcode_dir_opt, self.proj_name + '_opt')
+        if not os.path.isdir(opcode_dir_opt):
+            os.mkdir(opcode_dir_opt)
+        self.save_opcode(save_dir_opt, opcode_dir_opt)
+
+        bin_dir_opt = os.path.join(bin_dir_opt, self.proj_name + '_opt')
+        if not os.path.isdir(bin_dir_opt):
+            os.mkdir(bin_dir_opt)
+        self.save_bin_code(save_dir_opt, bin_dir_opt)
 
     @staticmethod
     def remove_empty_files(dir_name):
@@ -169,34 +198,22 @@ class SmartContract:
             csvwriter.writerow(fields)
             csvwriter.writerow(row)
 
-    def save_opcode(self, src_dirname, proj_name):
-        if not os.path.isdir(self.config['OPCODE_REPO_DIR']):
-            os.mkdir(self.config['OPCODE_REPO_DIR'])
-
-        opcode_dir = os.path.join(self.config['OPCODE_REPO_DIR'], proj_name)
-        if not os.path.isdir(opcode_dir):
-            os.mkdir(opcode_dir)
-
+    @staticmethod
+    def save_opcode(src_dirname, tar_dirname):
         for file in os.listdir(src_dirname):
             if file.endswith("opcode"):
                 source_full_path = os.path.join(src_dirname, file)
-                target_full_path = os.path.join(opcode_dir, file)
+                target_full_path = os.path.join(tar_dirname, file)
                 shutil.move(source_full_path, target_full_path)
             else:
                 continue
 
-    def save_bin_code(self, src_dirname, proj_name):
-        if not os.path.isdir(self.config['BIN_REPO_DIR']):
-            os.mkdir(self.config['BIN_REPO_DIR'])
-
-        bin_dir = os.path.join(self.config['BIN_REPO_DIR'], proj_name)
-        if not os.path.isdir(bin_dir):
-            os.mkdir(bin_dir)
-
+    @staticmethod
+    def save_bin_code(src_dirname, tar_dirname):
         for file in os.listdir(src_dirname):
             if file.endswith("bin"):
                 source_full_path = os.path.join(src_dirname, file)
-                target_full_path = os.path.join(bin_dir, file)
+                target_full_path = os.path.join(tar_dirname, file)
                 shutil.move(source_full_path, target_full_path)
             else:
                 continue

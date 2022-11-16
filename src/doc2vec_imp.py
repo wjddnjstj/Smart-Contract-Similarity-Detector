@@ -29,9 +29,12 @@ def load_data(data_dir):
 
 def train_model(config: dict):
     sentences = []
-    op_dir = config['OPCODE_REPO_DIR']
-    for proj in os.listdir(op_dir):
-        sentences += load_data(os.path.join(op_dir, proj))
+    op_training_dir = os.path.join(config['OPCODE'], config['DATA']['TRAINING_DIR'])
+    op_training_dir_opt = os.path.join(config['OPCODE'], config['DATA']['TRAINING_DIR_OPT'])
+    for proj in os.listdir(op_training_dir):
+        sentences += load_data(os.path.join(op_training_dir, proj))
+    for proj in os.listdir(op_training_dir_opt):
+        sentences += load_data(os.path.join(op_training_dir_opt, proj))
     # dm = 1 means ‘distributed memory’ (PV-DM)
     # dm = 0 means ‘distributed bag of words’ (PV-DBOW)
     model = gensim.models.doc2vec.Doc2Vec(dm=0)
@@ -45,11 +48,11 @@ def train_model(config: dict):
 
 def compare_sim(config: dict):
     model = torch.load(config['MODEL_DIR_DOC2VEC'] + 'doc2vec.pt')
-    target_dir = config['TARGET_PROJ_DIR']
-    repo_dir = config['OPCODE_REPO_DIR']
-    for target in os.listdir(target_dir):
-        for source in os.listdir(repo_dir):
-            compare_contract_sim(os.path.join(target_dir, target), os.path.join(repo_dir, source), model)
+    op_testing_dir = os.path.join(config['OPCODE'], config['DATA']['TESTING_DIR'])
+    op_testing_dir_opt = os.path.join(config['OPCODE'], config['DATA']['TESTING_DIR_OPT'])
+    for opcode in os.listdir(op_testing_dir):
+        for opcode_opt in os.listdir(op_testing_dir_opt):
+            compare_contract_sim(os.path.join(op_testing_dir, opcode), os.path.join(op_testing_dir_opt, opcode_opt), model)
 
 
 def compare_contract_sim(target, source, model):

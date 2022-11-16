@@ -78,11 +78,11 @@ def test(config, target_proj):
 
 
 def compare_sim(config):
-    repo_dir = config['ASM_REPO_DIR']
-    target_dir = config['ASM_CONFIG']['TARGET_PROJ_DIR']
-    for tp in os.listdir(target_dir):
-        for rp in os.listdir(repo_dir):
-            compare_contract_sim(os.path.join(target_dir, tp), os.path.join(repo_dir, rp), config)
+    asm_testing_dir = os.path.join(config['ASM'], config['DATA']['TESTING_DIR'])
+    asm_testing_dir_opt = os.path.join(config['ASM'], config['DATA']['TESTING_DIR_OPT'])
+    for asm in os.listdir(asm_testing_dir):
+        for asm_opt in os.listdir(asm_testing_dir_opt):
+            compare_contract_sim(os.path.join(asm_testing_dir, asm), os.path.join(asm_testing_dir_opt, asm_opt), config)
 
 
 def compare_contract_sim(target, source, config):
