@@ -15,7 +15,9 @@
         "TRAINING_DIR": "training",
         "TRAINING_DIR_OPT": "training_opt",
         "TESTING_DIR": "testing",
-        "TESTING_DIR_OPT": "testing_opt"
+        "TESTING_DIR_OPT": "testing_opt",
+        "TESTING_DIR_SELF": "testing_self",
+        "TESTING_DIR_MOD": "testing_modified"
     },
     "MODEL_DIR_DOC2VEC": "./model_doc2vec/",
     "MODEL_DIR_ASM2VEC": "./model_asm2vec/",
@@ -28,7 +30,6 @@
         "EPOCHS": 10,
         "NEG_SAMPLE_NUM": 100,
         "CALC_ACC": true,
-        "LEARNING_RATE": 0.02,
-        "TARGET_PROJ_DIR": "./target_asm_code/"
+        "LEARNING_RATE": 0.02
     }
 }
