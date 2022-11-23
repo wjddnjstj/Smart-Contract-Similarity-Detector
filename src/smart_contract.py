@@ -84,7 +84,7 @@ class SmartContract:
         except:
             return None
 
-# Ask Simin why we need two (what the difference is between the two get_solc functions)
+    # Ask Simin why we need two (what the difference is between the two get_solc functions)
     def get_solc(self, filename: str) -> Optional[Path]:
         with open(filename) as f:
             file = f.read()
@@ -167,18 +167,23 @@ class SmartContract:
             if opcode_filename.endswith("opcode"):
                 full_path = os.path.join(dir_name, opcode_filename)
                 f = open(full_path, 'r')
-                for line in f:
-                    formatted_opcode = open(full_path, 'w')
-                    has_first_line = False
-                    for opcode in line.split():
-                        if bool(has_first_line):  # line 1 has been written
-                            if opcode in self.opcode_set:
-                                formatted_opcode.write('\n' + opcode + ' ')
-                            else:
-                                formatted_opcode.write(opcode + ' ')
-                        else:  # No line has been written yet
-                            formatted_opcode.write(opcode + ' ')
-                            has_first_line = True
+                ori_opcodes = f.readlines()
+                assert len(ori_opcodes) == 1
+                ori_opcodes = ori_opcodes[0]
+                f.close()
+                formatted_opcode = ''
+                has_first_line = False
+                for opcode in ori_opcodes.split():
+                    if bool(has_first_line):  # line 1 has been written
+                        if opcode in self.opcode_set:
+                            formatted_opcode += ('\n' + opcode + ' ')
+                        else:
+                            formatted_opcode += (opcode + ' ')
+                    else:  # No line has been written yet
+                        formatted_opcode += (opcode + ' ')
+                        has_first_line = True
+                f = open(full_path, 'w')
+                f.write(formatted_opcode)
                 f.close()
 
     def log_message(self, process, save_dir):
