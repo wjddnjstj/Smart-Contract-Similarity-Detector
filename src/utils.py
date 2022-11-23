@@ -3,6 +3,9 @@ import r2pipe
 import json
 import shutil
 import math
+import numpy as np
+from matplotlib import pyplot as plt
+from sympy.physics.control.control_plots import matplotlib
 
 
 def bin2asm(config):
@@ -107,3 +110,14 @@ def clean_dataset(config):
                 else:
                     if not os.path.isdir(os.path.join(testing_set, d3)):
                         shutil.copytree(p3, os.path.join(testing_set, d3))
+
+def createPDF(simvalues):
+    matplotlib.use('TkAgg')
+
+    plt.rcParams["figure.figsize"] = [7.50, 3.50]
+    plt.rcParams["figure.autolayout"] = True
+    count, bins_count = np.histogram(simvalues, bins=100)
+    pdf = count / sum(count)
+    plt.plot(bins_count[1:], pdf, label="PDF")
+    plt.legend()
+    plt.show()

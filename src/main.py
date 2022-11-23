@@ -96,38 +96,38 @@ def main():
     config_dic = json.load(f_config)
     f_config.close()
 
-    # utils.clean_dataset(config_dic)
-    # prepare_directory(config_dic)
+    utils.clean_dataset(config_dic)
+    prepare_directory(config_dic)
 
-    # training_set = config_dic['TRAINING_SET']
-    # testing_set = config_dic['TESTING_SET']
-    #
-    # db = Database(config_dic)
-    # db.scan_files(training_set)
-    # db.scan_files(testing_set)
+    training_set = config_dic['TRAINING_SET']
+    testing_set = config_dic['TESTING_SET']
+
+    db = Database(config_dic)
+    db.scan_files(training_set)
+    db.scan_files(testing_set)
 
     if config_dic['ASM_2_VEC']:
-        # utils.bin2asm(config_dic)
+        utils.bin2asm(config_dic)
 
-        # asm_dir = config_dic['ASM']
-        # asm_training_dir = os.path.join(asm_dir, config_dic["DATA"]["TRAINING_DIR"])
-        # asm_training_dir_opt = os.path.join(asm_dir, config_dic["DATA"]["TRAINING_DIR_OPT"])
-        # for proj in os.listdir(asm_training_dir):
-        #     asm2vec_imp.train(config_dic, os.path.join(asm_training_dir, proj))
-        #
-        # for proj in os.listdir(asm_training_dir_opt):
-        #     asm2vec_imp.train(config_dic, os.path.join(asm_training_dir_opt, proj))
+        asm_dir = config_dic['ASM']
+        asm_training_dir = os.path.join(asm_dir, config_dic["DATA"]["TRAINING_DIR"])
+        asm_training_dir_opt = os.path.join(asm_dir, config_dic["DATA"]["TRAINING_DIR_OPT"])
+        for proj in os.listdir(asm_training_dir):
+            asm2vec_imp.train(config_dic, os.path.join(asm_training_dir, proj))
 
-        # asm_testing_dir = os.path.join(asm_dir, config_dic["DATA"]["TESTING_DIR"])
-        # for tp in os.listdir(asm_testing_dir):
-        #     asm2vec_imp.test(config_dic, os.path.join(asm_testing_dir, tp))
+        for proj in os.listdir(asm_training_dir_opt):
+            asm2vec_imp.train(config_dic, os.path.join(asm_training_dir_opt, proj))
+
+        asm_testing_dir = os.path.join(asm_dir, config_dic["DATA"]["TESTING_DIR"])
+        for tp in os.listdir(asm_testing_dir):
+            asm2vec_imp.test(config_dic, os.path.join(asm_testing_dir, tp))
 
         asm2vec_imp.compare_sim(config_dic)
         asm2vec_imp.compare_contract_sim(config_dic)
     else:
-        # doc2vec_imp.train_model(config_dic)
-        doc2vec_imp.compare_sim(config_dic)
-        doc2vec_imp.compare_contract_sim(config_dic)
+        doc2vec_imp.train_model(config_dic)
+        doc2vec_imp.compute_project_level_sim(config_dic)
+        doc2vec_imp.compute_contract_level_sim(config_dic)
 
 
 if __name__ == '__main__':
