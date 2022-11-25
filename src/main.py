@@ -90,6 +90,27 @@ def prepare_directory(config_dic):
     if not os.path.isdir(config_dic['LOG_DIR']):
         os.mkdir(config_dic['LOG_DIR'])
 
+    if not os.path.isdir(config_dic['RESULT']):
+        os.mkdir(config_dic['RESULT'])
+
+    if not os.path.isdir(os.path.join(config_dic['RESULT'], config_dic['REPORT']['PROJ_SIM'])):
+        os.mkdir(os.path.join(config_dic['RESULT'], config_dic['REPORT']['PROJ_SIM']))
+
+    if not os.path.isdir(os.path.join(config_dic['RESULT'], config_dic['REPORT']['PROJ_CO_CLONE'])):
+        os.mkdir(os.path.join(config_dic['RESULT'], config_dic['REPORT']['PROJ_CO_CLONE']))
+
+    if not os.path.isdir(os.path.join(config_dic['RESULT'], config_dic['REPORT']['PROJ_MAX_SIM'])):
+        os.mkdir(os.path.join(config_dic['RESULT'], config_dic['REPORT']['PROJ_MAX_SIM']))
+
+    if not os.path.isdir(os.path.join(config_dic['RESULT'], config_dic['REPORT']['CONT_SIM'])):
+        os.mkdir(os.path.join(config_dic['RESULT'], config_dic['REPORT']['CONT_SIM']))
+
+    if not os.path.isdir(os.path.join(config_dic['RESULT'], config_dic['REPORT']['CONT_CO_CLONE'])):
+        os.mkdir(os.path.join(config_dic['RESULT'], config_dic['REPORT']['CONT_CO_CLONE']))
+
+    if not os.path.isdir(os.path.join(config_dic['RESULT'], config_dic['REPORT']['CONT_MAX_SIM'])):
+        os.mkdir(os.path.join(config_dic['RESULT'], config_dic['REPORT']['CONT_MAX_SIM']))
+
 
 def main():
     f_config = open('./config.json', 'r')
@@ -122,12 +143,16 @@ def main():
         for tp in os.listdir(asm_testing_dir):
             asm2vec_imp.test(config_dic, os.path.join(asm_testing_dir, tp))
 
-        asm2vec_imp.compare_sim(config_dic)
-        asm2vec_imp.compare_contract_sim(config_dic)
+        asm2vec_imp.match_max_sim_proj(config_dic)
+        asm2vec_imp.match_max_sim_contract(config_dic)
+        asm2vec_imp.compute_project_level_sim(config_dic, test=True)
+        asm2vec_imp.compute_contract_level_sim(config_dic, test=True)
     else:
         doc2vec_imp.train_model(config_dic)
-        doc2vec_imp.compute_project_level_sim(config_dic)
-        doc2vec_imp.compute_contract_level_sim(config_dic)
+        doc2vec_imp.match_max_sim_proj(config_dic)
+        doc2vec_imp.match_max_sim_contract(config_dic)
+        doc2vec_imp.compute_project_level_sim(config_dic, test=True)
+        doc2vec_imp.compute_contract_level_sim(config_dic, test=True)
 
 
 if __name__ == '__main__':
