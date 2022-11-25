@@ -132,12 +132,12 @@ class SmartContract:
         self.exe_command(save_dir, prefix)
 
         opcode_dir = os.path.join(opcode_dir, self.proj_name)
-        if not os.path.isdir(opcode_dir):
+        if not os.path.isdir(opcode_dir) and len(os.listdir(save_dir)) > 0:
             os.mkdir(opcode_dir)
         self.save_opcode(save_dir, opcode_dir)
 
         bin_dir = os.path.join(bin_dir, self.proj_name)
-        if not os.path.isdir(bin_dir):
+        if not os.path.isdir(bin_dir) and len(os.listdir(save_dir)) > 0:
             os.mkdir(bin_dir)
         self.save_bin_code(save_dir, bin_dir)
 
@@ -146,12 +146,12 @@ class SmartContract:
         self.exe_command(save_dir_opt, prefix_opt)
 
         opcode_dir_opt = os.path.join(opcode_dir_opt, self.proj_name + '_opt')
-        if not os.path.isdir(opcode_dir_opt):
+        if not os.path.isdir(opcode_dir_opt) and len(os.listdir(save_dir_opt)) > 0:
             os.mkdir(opcode_dir_opt)
         self.save_opcode(save_dir_opt, opcode_dir_opt)
 
         bin_dir_opt = os.path.join(bin_dir_opt, self.proj_name + '_opt')
-        if not os.path.isdir(bin_dir_opt):
+        if not os.path.isdir(bin_dir_opt) and len(os.listdir(save_dir_opt)) > 0:
             os.mkdir(bin_dir_opt)
         self.save_bin_code(save_dir_opt, bin_dir_opt)
 

@@ -1,3 +1,4 @@
+import csv
 import os.path
 import r2pipe
 import json
@@ -111,9 +112,9 @@ def clean_dataset(config):
                     if not os.path.isdir(os.path.join(testing_set, d3)):
                         shutil.copytree(p3, os.path.join(testing_set, d3))
 
+
 def createPDF(simvalues):
     matplotlib.use('TkAgg')
-
     plt.rcParams["figure.figsize"] = [7.50, 3.50]
     plt.rcParams["figure.autolayout"] = True
     count, bins_count = np.histogram(simvalues, bins=100)
@@ -121,3 +122,10 @@ def createPDF(simvalues):
     plt.plot(bins_count[1:], pdf, label="PDF")
     plt.legend()
     plt.show()
+
+
+def generate_csv_report(filename, fields, rows):
+    with open(filename, 'w') as csvfile:
+        csvwriter = csv.writer(csvfile)
+        csvwriter.writerow(fields)
+        csvwriter.writerows(rows)
