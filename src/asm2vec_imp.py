@@ -131,7 +131,7 @@ def compute_project_level_sim(config: dict, test: bool):
         res_dir_path = os.path.join(config['RESULT'], config['REPORT']['PROJ_SIM'])
 
         filename = os.path.join(res_dir_path, 'asm2vec_proj_similarity_report_' + uuid + '.csv')
-        fields = ['project A', 'project B', 'similarity', 'same project']
+        fields = ['project A', 'project B', 'similarity']
         rows = []
 
     else:
@@ -151,14 +151,14 @@ def compute_project_level_sim(config: dict, test: bool):
             tp = target.rsplit('/', 1)[-1]
             rp = source.rsplit('/', 1)[-1]
             if len(os.listdir(target)) > 0:
-                proj_sim = project_similarity(target, source, config)
-                is_same_proj = False
                 if not test:
                     if tp in rp:
+                        proj_sim = project_similarity(target, source, config)
                         pl_similarity_value.append(proj_sim)
-                        is_same_proj = True
-                    rows.append([tp, rp, proj_sim, is_same_proj])
+                        rows.append([tp, rp, proj_sim])
                 else:
+                    proj_sim = project_similarity(target, source, config)
+                    is_same_proj = False
                     if tp in rp:
                         is_same_proj = True
                     is_co_clone = proj_sim >= config['THRESHOLD']['ASM_2_VEC_PROJ']
@@ -184,7 +184,7 @@ def compute_contract_level_sim(config: dict, test: bool):
         res_dir_path = os.path.join(config['RESULT'], config['REPORT']['CONT_SIM'])
 
         filename = os.path.join(res_dir_path, 'asm2vec_cont_similarity_report_' + uuid + '.csv')
-        fields = ['contract A', 'contract B', 'similarity', 'same contract']
+        fields = ['contract A', 'contract B', 'similarity']
         rows = []
 
     else:
@@ -226,17 +226,17 @@ def compute_contract_level_sim(config: dict, test: bool):
 
                     # compare 2 function vectors
                     v1, v2 = model.to('cpu').embeddings_f(torch.tensor([0, 1]))
-                    sim = cosine_similarity(v1, v2)
-                    is_same_cont = False
                     tc = proj + '/' + cont
                     rc = proj_opt + '/' + cont_opt
 
                     if not test:
                         if cont in cont_opt:
                             cl_similarity_value.append(sim)
-                            is_same_cont = True
-                        rows.append([tc, rc, sim, is_same_cont])
+                            sim = cosine_similarity(v1, v2)
+                            rows.append([tc, rc, sim])
                     else:
+                        sim = cosine_similarity(v1, v2)
+                        is_same_cont = False
                         if cont in cont_opt:
                             is_same_cont = True
                         is_co_clone = sim >= config['THRESHOLD']['ASM_2_VEC_CONT']
