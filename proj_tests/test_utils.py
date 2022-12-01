@@ -1,10 +1,8 @@
 import os
 import json
 import pytest
-
 import main
 import src.utils as utils
-import coverage
 
 
 @pytest.fixture
@@ -25,19 +23,23 @@ def test_bin2asm(config_dic):
 def test_generate_inst(config_dic):
     bin_dir = config_dic['BIN']
     bin_training_dir = os.path.join(bin_dir, config_dic["DATA"]["TRAINING_DIR"])
+    bin_testing_dir = os.path.join(bin_dir, config_dic["DATA"]["TESTING_DIR"])
     asm_dir = config_dic['ASM']
     asm_training_dir = os.path.join(asm_dir, config_dic["DATA"]["TRAINING_DIR"])
+    asm_testing_dir = os.path.join(asm_dir, config_dic["DATA"]["TESTING_DIR"])
     utils.generate_inst(bin_training_dir, asm_training_dir)
-    assert False
+    utils.generate_inst(bin_testing_dir, asm_testing_dir)
+    assert len(os.listdir(asm_testing_dir)) == 0
 
-@pytest.mark.skip(reason="already ran as part of setup")
+
 def test_clean_dataset():
-    pass
+    #clean_dataset() already ran during fixture setup. Just testing outcome.
+    assert len(os.listdir('proj_tests/testing_set')) > 0
 
 
-@pytest.mark.skip(reason="non-essential helper function for visual")
 def test_create_pdf():
-    pass
+    result = utils.createPDF([0.1, 0.2, 0.3, 0.4, 0.5])
+    assert result is None
 
 
 def test_generate_csv_report():

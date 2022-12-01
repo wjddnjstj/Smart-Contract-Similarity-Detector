@@ -114,6 +114,8 @@ def clean_dataset(config):
 
 
 def createPDF(simvalues):
+    import warnings
+    warnings.filterwarnings('ignore')
     plt.rcParams["figure.figsize"] = [7.50, 3.50]
     plt.rcParams["figure.autolayout"] = True
     count, bins_count = np.histogram(simvalues, bins=100)
