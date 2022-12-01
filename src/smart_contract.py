@@ -80,7 +80,7 @@ class SmartContract:
             pragma = self.get_pragma(file)
             pragma = re.sub(r">=0\.", r"^0.", pragma)
             version = solcx.install_solc_pragma(pragma)
-            return solcx.get_executable(version)
+            return solcx.install.get_executable(version)
         except:
             return None
 
