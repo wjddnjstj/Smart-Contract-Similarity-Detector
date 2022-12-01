@@ -1,2 +1,0 @@
-input,output,error
-./testing_set/0x00b784c0e9dd20fc865f89d05d0ce4417efb77a9/MintersWorld.sol,./out/testing_opt/0x00b784c0e9dd20fc865f89d05d0ce4417efb77a9_opt,NONE
