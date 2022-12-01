@@ -114,7 +114,6 @@ def prepare_directory(config_dic):
 
 def main():
     f_config = open('./config.json', 'r')
-    # f_config = open('../proj_tests/configT.json', 'r')
     config_dic = json.load(f_config)
     f_config.close()
 
@@ -144,14 +143,10 @@ def main():
         for tp in os.listdir(asm_testing_dir):
             asm2vec_imp.test(config_dic, os.path.join(asm_testing_dir, tp))
 
-        asm2vec_imp.match_max_sim_proj(config_dic)
-        asm2vec_imp.match_max_sim_contract(config_dic)
         asm2vec_imp.compute_project_level_sim(config_dic, test=True)
         asm2vec_imp.compute_contract_level_sim(config_dic, test=True)
     else:
         doc2vec_imp.train_model(config_dic)
-        doc2vec_imp.match_max_sim_proj(config_dic)
-        doc2vec_imp.match_max_sim_contract(config_dic)
         doc2vec_imp.compute_project_level_sim(config_dic, test=True)
         doc2vec_imp.compute_contract_level_sim(config_dic, test=True)
 

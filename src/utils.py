@@ -114,7 +114,6 @@ def clean_dataset(config):
 
 
 def createPDF(simvalues):
-    matplotlib.use('TkAgg')
     plt.rcParams["figure.figsize"] = [7.50, 3.50]
     plt.rcParams["figure.autolayout"] = True
     count, bins_count = np.histogram(simvalues, bins=100)
