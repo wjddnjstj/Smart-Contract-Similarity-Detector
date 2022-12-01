@@ -231,8 +231,8 @@ def compute_contract_level_sim(config: dict, test: bool):
 
                     if not test:
                         if cont in cont_opt:
-                            cl_similarity_value.append(sim)
                             sim = cosine_similarity(v1, v2)
+                            cl_similarity_value.append(sim)
                             rows.append([tc, rc, sim])
                     else:
                         sim = cosine_similarity(v1, v2)
@@ -247,86 +247,3 @@ def compute_contract_level_sim(config: dict, test: bool):
     if not test:
         with torch.no_grad():
             utils.createPDF(cl_similarity_value)
-
-
-def match_max_sim_proj(config):
-    uuid = datetime.now().strftime("%y%m%dT%H%M%S")
-    asm_testing_dir = os.path.join(config['ASM'], config['DATA']['TESTING_DIR'])
-    asm_testing_dir_opt = os.path.join(config['ASM'], config['DATA']['TESTING_DIR_OPT'])
-
-    res_dir_path = os.path.join(config['RESULT'], config['REPORT']['PROJ_MAX_SIM'])
-    filename = os.path.join(res_dir_path, 'asm2vec_proj_max_sim_report_' + uuid + '.csv')
-    fields = ['project', 'max_sim project', 'similarity', 'same project']
-    rows = []
-
-    for asm in tqdm(os.listdir(asm_testing_dir)):
-        max_proj_sim = 0
-        max_proj_name = ""
-        is_same_cont = False
-        for asm_opt in tqdm(os.listdir(asm_testing_dir_opt)):
-            target = os.path.join(asm_testing_dir, asm)
-            source = os.path.join(asm_testing_dir_opt, asm_opt)
-            if len(os.listdir(target)) > 0:
-                proj_sim = project_similarity(target, source, config)
-                if proj_sim > max_proj_sim:
-                    max_proj_sim = proj_sim
-                    max_proj_name = source.rsplit('/', 1)[-1]
-        if target.rsplit('/', 1)[-1] in max_proj_name:
-            is_same_cont = True
-        if len(os.listdir(target)) > 0:
-            rows.append([target.rsplit('/', 1)[-1], max_proj_name, max_proj_sim, is_same_cont])
-
-    utils.generate_csv_report(filename, fields, rows)
-
-
-def match_max_sim_contract(config: dict):
-    uuid = datetime.now().strftime("%y%m%dT%H%M%S")
-    asm_testing_dir = os.path.join(config['ASM'], config['DATA']['TESTING_DIR'])
-    asm_testing_dir_opt = os.path.join(config['ASM'], config['DATA']['TESTING_DIR_OPT'])
-
-    res_dir_path = os.path.join(config['RESULT'], config['REPORT']['CONT_MAX_SIM'])
-    filename = os.path.join(res_dir_path, 'asm2vec_cont_max_sim_report_' + uuid + '.csv')
-    fields = ['contract A', 'max_sim contract', 'similarity', 'same contract']
-    rows = []
-
-    if config['ASM_CONFIG']['DEVICE'] == 'auto':
-        device = 'cuda' if torch.cuda.is_available() else 'cpu'
-
-    model, tokens = asm2vec.utils.load_model(config['MODEL_DIR_ASM2VEC'] + 'asm2vec.pt', device=device)
-
-    for proj in tqdm(os.listdir(asm_testing_dir)):
-        for cont in tqdm(os.listdir(os.path.join(asm_testing_dir, proj))):
-            max_cont_sim = 0
-            max_cont_name = ""
-            is_same_cont = False
-            for proj_opt in tqdm(os.listdir(asm_testing_dir_opt)):
-                for cont_opt in tqdm(os.listdir(os.path.join(asm_testing_dir_opt, proj_opt))):
-                    functions, tokens_new = asm2vec.utils.load_data(
-                        [os.path.join(os.path.join(asm_testing_dir, proj), cont), os.path.join(os.path.join(asm_testing_dir_opt, proj_opt), cont_opt)])
-                    tokens.update(tokens_new)
-                    model.update(2, tokens.size())
-                    model = model.to(device)
-
-                    # train function embedding
-                    model = asm2vec.utils.train(
-                        functions,
-                        tokens,
-                        model=model,
-                        epochs=config['ASM_CONFIG']['EPOCHS'],
-                        device=device,
-                        mode='test',
-                        learning_rate=config['ASM_CONFIG']['LEARNING_RATE']
-                    )
-
-                    # compare 2 function vectors
-                    v1, v2 = model.to('cpu').embeddings_f(torch.tensor([0, 1]))
-                    sim = cosine_similarity(v1, v2)
-
-                    if sim > max_cont_sim:
-                        max_cont_sim = sim
-                        max_cont_name = proj_opt + '/' + cont_opt
-            if cont in max_cont_name:
-                is_same_cont = True
-            rows.append([proj + '/' + cont, max_cont_name, max_cont_sim, is_same_cont])
-
-    utils.generate_csv_report(filename, fields, rows)
