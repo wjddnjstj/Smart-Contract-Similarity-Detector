@@ -1,0 +1,2 @@
+input,output,error
+./testing_set/0x00c6c5e5c7c3be547f15b8a9e7de4de5e2b2a4ba/PriveSociete.sol,./out/testing_opt/0x00c6c5e5c7c3be547f15b8a9e7de4de5e2b2a4ba_opt,NONE

@@ -1,0 +1,2 @@
+input,output,error
+./training_set/0x359c9729204e6f44cc89a201c04772f4177fa158/AdventProject.sol,./out/training_opt/0x359c9729204e6f44cc89a201c04772f4177fa158_opt,NONE

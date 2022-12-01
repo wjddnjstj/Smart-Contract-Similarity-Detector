@@ -1,0 +1,2 @@
+input,output,error
+./testing_set/0x00abbdd24450ac270b5034b8f61ef0ce952727e9/TANJIRO.sol,./out/testing_opt/0x00abbdd24450ac270b5034b8f61ef0ce952727e9_opt,NONE

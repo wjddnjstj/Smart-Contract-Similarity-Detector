@@ -1,0 +1,2 @@
+input,output,error
+./testing_set/0x00a4d8e91d92595972ea5810537d87eb664f5bcd/Badlanders.sol,./out/testing_opt/0x00a4d8e91d92595972ea5810537d87eb664f5bcd_opt,NONE

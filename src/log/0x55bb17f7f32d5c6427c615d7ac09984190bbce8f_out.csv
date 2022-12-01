@@ -1,0 +1,2 @@
+input,output,error
+./training_set/0x55bb17f7f32d5c6427c615d7ac09984190bbce8f/LoopProtocol.sol,./out/training_opt/0x55bb17f7f32d5c6427c615d7ac09984190bbce8f_opt,NONE
