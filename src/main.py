@@ -114,6 +114,7 @@ def prepare_directory(config_dic):
 
 def main():
     f_config = open('./config.json', 'r')
+    # f_config = open('../proj_tests/configT.json', 'r')
     config_dic = json.load(f_config)
     f_config.close()
 

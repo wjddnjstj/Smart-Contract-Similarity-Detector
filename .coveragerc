@@ -1,0 +1,11 @@
+[run]
+omit = *test*
+       *config*
+       *.conf
+       *package*
+       *__init__*
+       .*
+       *helper*
+       */asm2vec/*
+       */settings/*
+
