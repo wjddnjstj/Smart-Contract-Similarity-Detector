@@ -1,0 +1,517 @@
+commit d2dfb3b1ab1bcc13b3b0d7397144854c67c30d6d
+Author: Jeongwon (Miley) Seo <60459873+mileyseo@users.noreply.github.com>
+Date:   Thu Dec 1 23:39:00 2022 -0600
+
+    Update README.md
+
+commit 39096082ee95baa3989c6a669cf9d001ce8e93f5
+Author: Jeongwon (Miley) Seo <60459873+mileyseo@users.noreply.github.com>
+Date:   Thu Dec 1 23:21:12 2022 -0600
+
+    Update README.md
+    
+    add additional setup requirements for the user
+
+commit 3154769083cb36f65ee759a554e74a8d3cbed73f
+Merge: 3e2e0c6 58eae3d
+Author: Miao (Annabella) Miao <annabellamiao@gmail.com>
+Date:   Thu Dec 1 23:03:42 2022 -0600
+
+    Merge pull request #26 from mileyseo/miaomiao/upload-data
+    
+    add similarity reports and pdf graphs
+
+commit 58eae3d37d85a6780ab9afba175b67d12b54f990
+Author: Miao Miao <annabellamiao@gmail.com>
+Date:   Thu Dec 1 23:03:08 2022 -0600
+
+    add similarity reports and pdf graphs
+
+commit 3e2e0c6c98850a4437ffa661e5227c91d1accd99
+Author: Miao Miao <annabellamiao@gmail.com>
+Date:   Thu Dec 1 22:55:52 2022 -0600
+
+    - format code and comments
+
+commit dce8fede0c98f078876cb13b297f6f26ca2e27bf
+Author: Jeongwon (Miley) Seo <60459873+mileyseo@users.noreply.github.com>
+Date:   Thu Dec 1 21:57:13 2022 -0600
+
+    Modify Directories
+    
+    * Revise mistakes made
+
+commit b13ba16373f35485c3e7b109d910d3c0066ef0a3
+Author: Jeongwon (Miley) Seo <60459873+mileyseo@users.noreply.github.com>
+Date:   Thu Dec 1 21:23:50 2022 -0600
+
+    Update configT.json
+
+commit e02694f8b0391f2dd5c611eb53ea9699f6fdd02e
+Author: Jeongwon (Miley) Seo <60459873+mileyseo@users.noreply.github.com>
+Date:   Thu Dec 1 21:11:18 2022 -0600
+
+    Comments + Config.JSON modification
+
+commit ad678f1666a9b0ef1d6ed3869b9368897ee39617
+Merge: ee4f5f3 b34ca0d
+Author: Miao (Annabella) Miao <annabellamiao@gmail.com>
+Date:   Thu Dec 1 20:37:59 2022 -0600
+
+    Merge pull request #25 from mileyseo/miaomiao/unit-test-doc2vec
+    
+    add test cases for doc2vec_imp.py
+
+commit b34ca0d45d2dbef410fc9a4fba570256ef34242f
+Author: Miao Miao <annabellamiao@gmail.com>
+Date:   Thu Dec 1 20:37:10 2022 -0600
+
+    add test cases for doc2vec_imp.py
+
+commit ee4f5f3bc3ca37c6b62079baf1c8a2b419cab2f8
+Merge: 2f074a5 fcbd458
+Author: Jeongwon (Miley) Seo <60459873+mileyseo@users.noreply.github.com>
+Date:   Thu Dec 1 20:25:57 2022 -0600
+
+    Merge pull request #24 from mileyseo/fix/final_edits
+    
+    Minor Fixes
+
+commit fcbd4586c025a6cc721c77c2ab42ca86ffdc1336
+Author: Jeongwon (Miley) Seo <60459873+mileyseo@users.noreply.github.com>
+Date:   Thu Dec 1 20:11:30 2022 -0600
+
+    Minor Fixes
+    
+    Remove test_asm2vec_imp, add unit testing for smart_contract and remove unnecessary code
+
+commit 2f074a525cf7ca6ea0d4b7e1f87a77e7fa56b022
+Author: Jeongwon (Miley) Seo <60459873+mileyseo@users.noreply.github.com>
+Date:   Thu Dec 1 16:18:46 2022 -0600
+
+    Update README.md
+    
+    Addition of figures + More details regarding the project
+
+commit 456b5445aa0e08718bd03b1266999e5cd798d279
+Author: junaidh1 <junaid_hashmi@hotmail.com>
+Date:   Thu Dec 1 03:34:33 2022 -0600
+
+    Completed test_utils.py functionality and made changes to setup.cfg and utils.py to suppress warnings that were messing up the output format.
+
+commit c62af742b576bf942002817d7eb4eb823dbdd38f
+Merge: 1419cf8 eef2704
+Author: Miao (Annabella) Miao <annabellamiao@gmail.com>
+Date:   Thu Dec 1 00:05:09 2022 -0600
+
+    Merge pull request #23 from mileyseo/miaomiao/remove-contracts-folder
+    
+    remove contracts folder
+
+commit eef2704b9edaed3034294e0274f98e6afeb9bd1a
+Author: Miao Miao <annabellamiao@gmail.com>
+Date:   Thu Dec 1 00:04:32 2022 -0600
+
+    remove contracts folder
+
+commit 1419cf82b00a7869ce3c51c22e9b12ea623c479c
+Merge: 4687f71 1a6eaab
+Author: Miao (Annabella) Miao <annabellamiao@gmail.com>
+Date:   Thu Dec 1 00:01:59 2022 -0600
+
+    Merge pull request #22 from mileyseo/miaomiao/remove-redundant-methods
+    
+    remove redundant methods
+
+commit 1a6eaabc8731360b9f0cd722816990fc3b15fe22
+Author: Miao Miao <annabellamiao@gmail.com>
+Date:   Wed Nov 30 23:54:41 2022 -0600
+
+    remove redundant methods
+
+commit 4687f71584f71622b3b514ca21a851e247709e0a
+Merge: f2a459c 6375bbd
+Author: Jeongwon (Miley) Seo <60459873+mileyseo@users.noreply.github.com>
+Date:   Wed Nov 30 23:20:54 2022 -0600
+
+    Merge pull request #21 from mileyseo/test_dev
+    
+    integrate pytest framework & create unit tests
+
+commit 6375bbd1d38a306311146955199527ee4b70db67
+Author: Miao Miao <annabellamiao@gmail.com>
+Date:   Wed Nov 30 22:52:18 2022 -0600
+
+    remove redundant files
+
+commit eafe9e909813b929823714ac9027dbb7a6c75c51
+Author: junaidh1 <junaid_hashmi@hotmail.com>
+Date:   Wed Nov 30 21:14:21 2022 -0600
+
+    Test and code coverage setup.
+
+commit f62745ac36b5d16bec00047421a347a5523898b1
+Author: junaidh1 <junaid_hashmi@hotmail.com>
+Date:   Wed Nov 30 21:14:03 2022 -0600
+
+    Test and code coverage setup.
+
+commit ff2afdb7a91410423a590bd6203107e6e5b00a61
+Author: junaidh1 <junaid_hashmi@hotmail.com>
+Date:   Mon Nov 28 23:37:01 2022 -0600
+
+    Test and code coverage setup.
+
+commit f2a459c151a90fd494a4cb57f01b8ecf9bb4ba0c
+Merge: f35c2cf e564539
+Author: Miao (Annabella) Miao <annabellamiao@gmail.com>
+Date:   Sun Nov 27 19:00:57 2022 -0600
+
+    Merge pull request #20 from mileyseo/miaomiao/modify-doc2vec-algo
+    
+    improve doc2vec & asm2vec algorithm
+
+commit e564539cc228c1436664db5f870c12ed05736cd8
+Author: Miao Miao <annabellamiao@gmail.com>
+Date:   Sun Nov 27 18:59:12 2022 -0600
+
+    improve doc2vec & asm2vec algorithm
+
+commit f35c2cf4fc8ceb3869fd96a41e0309b5fd616fd7
+Merge: 44c27d3 2cc1390
+Author: Jeongwon (Miley) Seo <60459873+mileyseo@users.noreply.github.com>
+Date:   Fri Nov 25 01:00:59 2022 -0600
+
+    Merge pull request #19 from mileyseo/miaomiao/detect-co-clone-projects
+    
+    add detect co-clone-projects feature
+
+commit 2cc139072741ef13435a6ee7accaddbcf8c3f8f6
+Author: Miao Miao <annabellamiao@gmail.com>
+Date:   Fri Nov 25 00:26:23 2022 -0600
+
+    add detect co-clone-projects feature
+
+commit 44c27d324c5e455b70f8f340765aaa28d2a8ff09
+Author: Jeongwon (Miley) Seo <60459873+mileyseo@users.noreply.github.com>
+Date:   Wed Nov 23 16:49:38 2022 -0600
+
+    - Revise the flow of comparing similarity values from project and contract-level testing
+    - Output a probability density function (PDF) to determine the threshold --> TBD
+
+commit 98147d6f9e12ecd4fbd89cff2743d6b32707ced5
+Author: Jeongwon (Miley) Seo <60459873+mileyseo@users.noreply.github.com>
+Date:   Tue Nov 22 23:49:50 2022 -0600
+
+    Revise format_opcode function
+
+commit 6e025a7480618f5b915a205e5443a989033919de
+Merge: 3336d17 43bfd4c
+Author: Jeongwon (Miley) Seo <60459873+mileyseo@users.noreply.github.com>
+Date:   Thu Nov 17 21:48:54 2022 -0600
+
+    Merge pull request #18 from mileyseo/miaomiao/contract-level-comparison
+    
+    add contract level comparison
+
+commit 43bfd4cde4832fafa3cc7703d95529c322ff422e
+Author: Miao Miao <annabellamiao@gmail.com>
+Date:   Thu Nov 17 21:46:02 2022 -0600
+
+    add contract level comparison
+
+commit 3336d17869a65f5f5cd07695d0f97a50be621ef4
+Merge: b42bf9d e3138ea
+Author: Miao (Annabella) Miao <annabellamiao@gmail.com>
+Date:   Tue Nov 15 21:11:50 2022 -0600
+
+    Merge pull request #17 from mileyseo/miaomiao-reorganize-project
+    
+    reorganized project structure
+
+commit e3138ead471bfc232b959da9f18b2914c8c3a4d7
+Author: Miao Miao <annabellamiao@gmail.com>
+Date:   Sat Nov 12 00:05:38 2022 -0600
+
+    reorganized project structure
+
+commit b42bf9d7c457114333195d4ed12d7f7942122dd6
+Merge: 2f726de 589f8a1
+Author: Jeongwon (Miley) Seo <60459873+mileyseo@users.noreply.github.com>
+Date:   Sun Nov 6 22:46:29 2022 -0600
+
+    Merge pull request #16 from mileyseo/miaomiao/asm2vec_modification
+    
+    asm2vec modification
+
+commit 589f8a182d70266e47c2a768dff08f4339f7e7b1
+Author: Miao Miao <annabellamiao@gmail.com>
+Date:   Sun Nov 6 22:37:38 2022 -0600
+
+    asm2vec modification
+
+commit 2f726de15d2ec2e1c76ff253b5e63f801062afd1
+Merge: 7c089d3 e77a99d
+Author: Jeongwon (Miley) Seo <60459873+mileyseo@users.noreply.github.com>
+Date:   Fri Nov 4 18:33:22 2022 -0500
+
+    Merge pull request #15 from mileyseo/implement_cfg
+    
+    Create CFG
+
+commit e77a99db33c387b03be800dbaea16d8cc0d9e7dc
+Author: Jeongwon (Miley) Seo <60459873+mileyseo@users.noreply.github.com>
+Date:   Fri Nov 4 18:32:21 2022 -0500
+
+    Create CFG
+
+commit 7c089d30d064405e0842bbaf532196e6cba8eb98
+Merge: 912c20a d3ce86e
+Author: Junaid Hashmi <48263515+junaidh1@users.noreply.github.com>
+Date:   Wed Nov 2 19:37:06 2022 -0500
+
+    Merge pull request #14 from mileyseo/miaomiao-asm2vec-implementation
+    
+    implement similarity comparison using asm2vec model. Looks good - no conflicts.
+
+commit d3ce86e2d1af1e5e3430d3aca6bcda44cc18c01e
+Author: Miao Miao <annabellamiao@gmail.com>
+Date:   Wed Nov 2 18:25:04 2022 -0500
+
+    implement similarity comparison using asm2vec model
+
+commit 912c20a250e005e9537fa3c6480d381673a57720
+Merge: 6ebdb72 d4571d7
+Author: Junaid Hashmi <48263515+junaidh1@users.noreply.github.com>
+Date:   Thu Oct 27 18:49:35 2022 -0500
+
+    Merge pull request #13 from mileyseo/miaomiao-filter_out_empty_output
+    
+    filter out empty output files merged
+
+commit d4571d7078b97d3638bf01a352ca08738aecbbfc
+Author: Miao Miao <annabellamiao@gmail.com>
+Date:   Thu Oct 27 15:11:52 2022 -0500
+
+    filter out empty output files
+
+commit 6ebdb72bcb9ef2b2191d59c17591f59558678c04
+Merge: b1a3074 7c60b17
+Author: Junaid Hashmi <48263515+junaidh1@users.noreply.github.com>
+Date:   Thu Oct 27 10:49:57 2022 -0500
+
+    Merge pull request #12 from mileyseo/opcode-move
+    
+    Moving Opcode is being merged, as I don't see any conflicts.
+
+commit 7c60b17ae8a04ffa4508d6ce42362fc4ae78e71a
+Author: Jeongwon (Miley) Seo <60459873+mileyseo@users.noreply.github.com>
+Date:   Wed Oct 26 20:16:16 2022 -0500
+
+    Moving Opcode
+
+commit b1a3074e696edf498dd151248d32a9390ae355d4
+Merge: 5e1a01a a7bc8fc
+Author: Jeongwon (Miley) Seo <60459873+mileyseo@users.noreply.github.com>
+Date:   Wed Oct 26 11:18:23 2022 -0500
+
+    Merge pull request #11 from mileyseo/miaomiao/refactor_doc2vec
+    
+    refactor using doc2vec model to compare similarity
+
+commit a7bc8fcbea7df650c44777f5316c999a72f06d66
+Author: Miao Miao <annabellamiao@gmail.com>
+Date:   Sun Oct 23 20:03:36 2022 -0500
+
+    refactor using doc2vec model to compare similarity
+
+commit 5e1a01ad238da850858c3cfd3036e78b733e53ab
+Merge: 87f6789 57c73f3
+Author: Jeongwon (Miley) Seo <60459873+mileyseo@users.noreply.github.com>
+Date:   Thu Oct 20 14:02:53 2022 -0500
+
+    Merge pull request #10 from mileyseo/miaomiao-move_convert_solc_to_opcode
+    
+    modified train_model and test_model functions in smart_contract.py
+
+commit 57c73f3d24245778bc7359f499e9b8f61be94af8
+Author: Miao Miao <annabellamiao@gmail.com>
+Date:   Wed Oct 19 17:15:40 2022 -0500
+
+    modify train_model & test_model functions
+
+commit 87f6789159edebf3f8c86554e6d95a0297e1f6e1
+Merge: b536016 cdaa70d
+Author: Junaid Hashmi <48263515+junaidh1@users.noreply.github.com>
+Date:   Fri Oct 14 16:28:31 2022 -0500
+
+    Merge pull request #9 from mileyseo/miaomiao-preliminary_asm_2_vector
+    
+    preliminary asm_2_vec looks clean
+
+commit cdaa70d9f5d79f0a8c52331ec457a95bb5671dec
+Author: Miao Miao <annabellamiao@gmail.com>
+Date:   Fri Oct 14 15:26:44 2022 -0500
+
+    preliminary asm_2_vec
+
+commit b536016cbdc9cab610b579ed173f5900b872d2a8
+Merge: 03772e4 0a359c4
+Author: Junaid Hashmi <48263515+junaidh1@users.noreply.github.com>
+Date:   Wed Oct 12 23:13:41 2022 -0500
+
+    Merge pull request #7 from mileyseo/miaomiao-move_convert_solc_to_opcode
+    
+    move "convert solc to opcode" to SmartContract class
+
+commit 0a359c43db5b0d0be8f606299b821eab561d8cb7
+Author: Miao Miao <annabellamiao@gmail.com>
+Date:   Wed Oct 12 16:59:26 2022 -0500
+
+    modify class methods & fix errors
+
+commit 5765ebfac63b2ef8a9f84c4131c5ae71c22c2653
+Author: Miao Miao <annabellamiao@gmail.com>
+Date:   Sun Oct 9 22:23:19 2022 -0500
+
+    move "convert solc to opcode" to SmartContract class
+
+commit 03772e4d8a48a6503e3664958f4f04d38c261d61
+Merge: fceb9d7 ccbb4d2
+Author: Miao (Annabella) Miao <annabellamiao@gmail.com>
+Date:   Sun Oct 9 22:08:31 2022 -0500
+
+    Merge pull request #6 from mileyseo/miley_movecode
+    
+    Update SmartContractClass.py
+
+commit ccbb4d2dfd5d0ce81770dbe405f2959e34a71a05
+Author: Jeongwon (Miley) Seo <60459873+mileyseo@users.noreply.github.com>
+Date:   Sun Oct 9 16:31:45 2022 -0500
+
+    Update SmartContractClass.py
+    
+    Moving assembly formatter code into Smart Contract class
+
+commit fceb9d7a6ca8a5eb6d194c179ddb88291ced7c99
+Author: Junaid Hashmi <junaid_hashmi@hotmail.com>
+Date:   Sun Oct 9 14:58:02 2022 -0500
+
+    Updated config.py
+
+commit a1c3d8d52b59763ce0934167ae5eaab95148eb7e
+Author: Junaid Hashmi <junaid_hashmi@hotmail.com>
+Date:   Sun Oct 9 14:53:35 2022 -0500
+
+    Added config.py
+
+commit 382a37066e8dc94e7a5fb804f2032760be674866
+Author: Junaid Hashmi <junaid_hashmi@hotmail.com>
+Date:   Sun Oct 9 11:37:56 2022 -0500
+
+    Added SmartContractClass template
+
+commit 5ae1abd63d0ea4c8550e4e306634f54e83729ea6
+Merge: de5289f 341b3a9
+Author: Jeongwon (Miley) Seo <60459873+mileyseo@users.noreply.github.com>
+Date:   Sat Oct 8 14:04:07 2022 -0500
+
+    Merge pull request #5 from mileyseo/bin_conversion
+    
+    Bin conversion
+
+commit 341b3a999622b0dda328257434ca0b3ce99e31e9
+Author: Junaid Hashmi <junaid_hashmi@hotmail.com>
+Date:   Fri Oct 7 03:00:58 2022 -0500
+
+    Added convert_bin() function to utils.py to use rax2 on binary files and make them consumable by r2
+
+commit de69fd2b60ebbbbd19abceb9000c9d08efc6a278
+Author: Junaid Hashmi <junaid_hashmi@hotmail.com>
+Date:   Fri Oct 7 01:17:45 2022 -0500
+
+    Revert "Added convert_bin() function to utils.py to use rax2 on binary files and make them consumable by r2"
+    
+    This reverts commit 0bf135fa5079a7d57879b54e04a4cd78c34446fd.
+
+commit 0bf135fa5079a7d57879b54e04a4cd78c34446fd
+Author: Junaid Hashmi <junaid_hashmi@hotmail.com>
+Date:   Fri Oct 7 01:10:40 2022 -0500
+
+    Added convert_bin() function to utils.py to use rax2 on binary files and make them consumable by r2
+
+commit de5289f75aec1a8fdffae87d3eb609205d6d2f12
+Merge: c9af22e df23453
+Author: Annabella Miao （缪淼） <annabellamiao@gmail.com>
+Date:   Thu Oct 6 15:35:56 2022 -0500
+
+    Merge pull request #4 from mileyseo/formatting
+    
+    Reformat Opcode Files
+
+commit df2345386aa70d91867e3d6ff622bff7f328d1cc
+Merge: 1a15075 c9af22e
+Author: Annabella Miao （缪淼） <annabellamiao@gmail.com>
+Date:   Thu Oct 6 15:35:14 2022 -0500
+
+    Merge branch 'main' into formatting
+
+commit c9af22e021dde4bfda352728c254740b2a5d9d07
+Merge: 66f05ed 5bb95d6
+Author: Jeongwon (Miley) Seo <60459873+mileyseo@users.noreply.github.com>
+Date:   Thu Oct 6 15:24:09 2022 -0500
+
+    Merge pull request #2 from mileyseo/miaomiao-solc-output
+    
+    output error message as csv files into log directory
+
+commit 1a15075ed8f759b4fc1574428174902910bd3621
+Author: Jeongwon (Miley) Seo <60459873+mileyseo@users.noreply.github.com>
+Date:   Thu Oct 6 15:22:43 2022 -0500
+
+    Update prepare_data.py
+
+commit 5bb95d64c1bcce256298a1096a8db045723124e1
+Author: Miao Miao <annabellamiao@gmail.com>
+Date:   Sat Oct 1 16:06:34 2022 -0500
+
+    output error message in csv files
+
+commit 66f05ed0ad25c712d7045459874c9e2a71b7b75e
+Merge: f2dd6c2 1a80930
+Author: Junaid Hashmi <48263515+junaidh1@users.noreply.github.com>
+Date:   Thu Sep 29 10:26:19 2022 -0500
+
+    Merge pull request #1 from mileyseo/miaomiao-solc-output
+    
+    add main func & implement log output & --optimized version
+
+commit 1a8093069c919fc1bf5332dff170edec4a0c0dae
+Author: Miao Miao <annabellamiao@gmail.com>
+Date:   Sun Sep 25 22:05:42 2022 -0500
+
+    add main func & implement log output & --optimized version
+    
+    - added main function in prepare_data.py
+    - implemented out/error output
+    - implemented --optimized & not --optimized output and stored in respective directory
+
+commit f2dd6c2acb1059b3c9c0097b8cbdc31597b9fcb4
+Author: Jeongwon (Miley) Seo <60459873+mileyseo@users.noreply.github.com>
+Date:   Sun Sep 25 17:38:25 2022 -0500
+
+    Create prepare_data.py
+    
+    up to compile_source_project function
+
+commit d0de5a855853325e40d5702631166bd234edaa24
+Author: Jeongwon (Miley) Seo <60459873+mileyseo@users.noreply.github.com>
+Date:   Sun Sep 25 17:37:31 2022 -0500
+
+    Create utils.py
+
+commit 7dd9d1d84b4f83e34967f72bf65f29926a395bd7
+Author: Jeongwon (Miley) Seo <60459873+mileyseo@users.noreply.github.com>
+Date:   Fri Sep 16 10:12:44 2022 -0500
+
+    Initial commit
