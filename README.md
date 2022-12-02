@@ -31,12 +31,25 @@ This class diagram represents the internal classes that are defined and used in 
 
 ## Getting Started
 
+### Setup
+
+1. Create a ```/contracts``` directory under ```/src/```
+2. Go to this github repository https://github.com/PrCatch/etherscan-0815-0914 
+3. Download project as a ZIP file
+4. Extract the project from the ZIP file
+5. Select the contracts you want to compare from the ```contracts``` folder
+6. Place those contracts into ```/src/contracts``` directory
+    * The contracts should be placed following the format of ```/#/#/project``` <br>
+    * Example: <br>
+    ![Screenshot 2022-12-01 at 11 20 01 PM](https://user-images.githubusercontent.com/60459873/205220425-d274ec6a-3bad-4be4-91d7-15fda59caa4c.png)
+
 ### Dependencies
 
 * Devices:
     * Mac or Linux
     * Windows
-* Python Libraries: 
+* Python 3.8 or higher
+* Python Packages: 
     * gensim
     * numpy
     * matplotlib
