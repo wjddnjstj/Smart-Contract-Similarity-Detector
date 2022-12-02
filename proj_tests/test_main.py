@@ -3,9 +3,6 @@ import pytest
 import main
 import utils
 
-def test_main_for_doc2vec()
-def test_main_for_asm2vec()
-
 @pytest.fixture()
 def config_dic():
     f_config = open('proj_tests/configT.json', 'r')
