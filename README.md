@@ -43,23 +43,33 @@ This class diagram represents the internal classes that are defined and used in 
     * Example: <br>
     ![Screenshot 2022-12-01 at 11 20 01 PM](https://user-images.githubusercontent.com/60459873/205220425-d274ec6a-3bad-4be4-91d7-15fda59caa4c.png)
 
-### Dependencies
+### Environment Prerequisites
 
 * Devices:
     * Mac or Linux
     * Windows
 * Python 3.8 or higher
 * Python Packages: 
-    * gensim
+    * os
+    * pathlib
+    * typing
+    * shutil
+    * csv
+    * subprocess
+    * random
+    * math
+    * json
+    * torch
+    * tqdm
     * numpy
     * matplotlib
     * r2pipe
-    * torch
-    * py-solc-x
-    * etc,. <br>
-Note: Libraries that need to be installed will be shown when the repository is open on your preferred external editor
-* External ASM_2_VEC model:
-    * https://github.com/oalieno/asm2vec-pytorch.git
+    * gensim
+    * solcx
+Note: Packages that need to be installed will be shown when the repository is open on your preferred external editor
+* Solicity Compiler: https://github.com/ethereum/solidity <br>
+* Radare2 Compiler: https://github.com/radareorg/radare2 <br>
+* ASM_2_VEC model: https://github.com/oalieno/asm2vec-pytorch.git <br>
 
 ## Authors
 
