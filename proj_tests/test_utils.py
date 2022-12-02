@@ -1,7 +1,7 @@
 import os
 import json
 import pytest
-import main
+import src.main as main
 import src.utils as utils
 
 
@@ -15,9 +15,9 @@ def config_dic():
     return config_dic
 
 
+# remaining bin2asm functionality is tested under test_generate_inst()
 def test_bin2asm(config_dic):
     assert len(config_dic) == 16
-    # remaining bin2asm functionality is tested under test_generate_inst()
 
 
 def test_generate_inst(config_dic):
@@ -32,8 +32,8 @@ def test_generate_inst(config_dic):
     assert len(os.listdir(asm_testing_dir)) == 0
 
 
+# clean_dataset() already ran during fixture setup. Just testing outcome.
 def test_clean_dataset():
-    #clean_dataset() already ran during fixture setup. Just testing outcome.
     assert len(os.listdir('proj_tests/testing_set')) > 0
 
 

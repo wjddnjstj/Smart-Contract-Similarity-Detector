@@ -3,6 +3,7 @@ import pytest
 import main
 import utils
 
+
 @pytest.fixture()
 def config_dic():
     f_config = open('proj_tests/configT.json', 'r')
@@ -15,6 +16,7 @@ def config_dic():
 def test_prepare_directory(config_dic):
     main.prepare_directory(config_dic)
     assert True
+
 
 @pytest.mark.skip(reason="other tests cover all methods used here")
 def test_main():
