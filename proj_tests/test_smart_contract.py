@@ -25,12 +25,13 @@ def test_post_compilation():
 def test_compile_contract():
     assert True
 
+
 def test_remove_empty_files():
     data_dir = "proj_tests/__fixtures__/0x01c5f9163845ed9fe55e404831800b50edfcaa9e"
     smart_contract.SmartContract.remove_empty_files(data_dir)
 
 
-@pytest.mark.skip(reason="need to refactor format_opcode to make it testable")
+@pytest.mark.skip(reason="need to refactor format_opcode() to make it testable")
 def test_format_opcode():
     assert True
 
@@ -38,6 +39,7 @@ def test_format_opcode():
 @pytest.mark.skip(reason="need to refactor log_message() to make it testable")
 def test_log_message():
     assert True
+
 
 def test_save_opcode():
     source = "proj_tests/__fixtures__"

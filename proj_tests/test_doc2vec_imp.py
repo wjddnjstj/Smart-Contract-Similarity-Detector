@@ -57,6 +57,6 @@ def test_compute_project_level_sim():
     assert True
 
 
-@pytest.mark.skip(reason="need to refactor compute_contract_level_sim() to make it testable")
+@pytest.mark.skip(reason="need to refactor compute_project_level_sim() to make it testable")
 def test_compute_contract_level_sim():
     assert True

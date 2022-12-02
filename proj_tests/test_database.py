@@ -21,6 +21,6 @@ def config_dic():
     return config_dic
 
 
-@pytest.mark.skip(reason="need to refactor compute_contract_level_sim() to make it testable")
+@pytest.mark.skip(reason="need to refactor scan_files() to make it testable")
 def test_scan_files():
     assert True

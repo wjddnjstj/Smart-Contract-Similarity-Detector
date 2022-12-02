@@ -143,7 +143,9 @@ def main():
 
         asm2vec_imp.compute_project_level_sim(config_dic, test=True)
         asm2vec_imp.compute_contract_level_sim(config_dic, test=True)
-    else: # If the config setting is set under DOC_2_VEC mode
+
+        # If the config setting is set under DOC_2_VEC mode
+    else:
         doc2vec_imp.train_model(config_dic)
         doc2vec_imp.compute_project_level_sim(config_dic, test=True)
         doc2vec_imp.compute_contract_level_sim(config_dic, test=True)

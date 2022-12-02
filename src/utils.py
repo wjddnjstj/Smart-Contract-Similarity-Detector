@@ -6,7 +6,6 @@ import shutil
 import math
 import numpy as np
 from matplotlib import pyplot as plt
-from sympy.physics.control.control_plots import matplotlib
 
 
 # This function is for radare2 (r2) to convert the binary to asm
