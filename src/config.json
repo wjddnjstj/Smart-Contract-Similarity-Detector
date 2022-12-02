@@ -33,18 +33,16 @@
         "LEARNING_RATE": 0.02
     },
     "THRESHOLD": {
-        "DOC_2_VEC_PROJ": 0.84,
-        "DOC_2_VEC_CONT": 0.56,
+        "DOC_2_VEC_PROJ": 0.80,
+        "DOC_2_VEC_CONT": 0.40,
         "ASM_2_VEC_PROJ": 0.60,
-        "ASM_2_VEC_CONT": 0.36
+        "ASM_2_VEC_CONT": 0.40
     },
     "RESULT": "./result/",
     "REPORT": {
         "PROJ_SIM": "proj_sim_report",
         "PROJ_CO_CLONE": "proj_co_clone_report",
         "CONT_SIM": "cont_sim_report",
-        "CONT_CO_CLONE": "cont_co_clone_report",
-        "PROJ_MAX_SIM": "proj_max_sim_report",
-        "CONT_MAX_SIM": "cont_max_sim_report"
+        "CONT_CO_CLONE": "cont_co_clone_report"
     }
 }

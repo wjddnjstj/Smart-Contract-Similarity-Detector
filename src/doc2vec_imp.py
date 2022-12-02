@@ -10,6 +10,7 @@ import utils
 from tqdm import tqdm
 
 
+# This function is used to read the instructions line by line
 def preprocess(inst_path, data_dir):
     f = open(os.path.join(data_dir, inst_path), 'r')
     inst = f.readlines()
@@ -17,12 +18,14 @@ def preprocess(inst_path, data_dir):
     return inst
 
 
+# This function is used to compare two contracts and is called in the project_similarity function
 def load_func(inst_path, data_dir):
     instructions = preprocess(inst_path, data_dir)
     sentences = TaggedDocument(instructions, [0])
     return sentences
 
 
+# This function is used to load the entire data for the comparison and is called in the train_model function
 def load_data(data_dir):
     instructions = [preprocess(d, data_dir) for d in os.listdir(data_dir)]
     sentences = [TaggedDocument(l, [i]) for i, l in enumerate(instructions)]
@@ -30,6 +33,7 @@ def load_data(data_dir):
     return sentences
 
 
+# This function is used to train the model under DOC_2_VEC mode
 def train_model(config: dict):
     sentences = []
     op_training_dir = os.path.join(config['OPCODE'], config['DATA']['TRAINING_DIR'])

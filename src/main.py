@@ -6,6 +6,9 @@ import doc2vec_imp
 import asm2vec_imp
 
 
+# This function automatically creates the directories for the program to use.
+# The list of directories that it creates is: out, result, training, testing, opcode, and
+# asm (testing, testing_opt, training, training_opt)
 def prepare_directory(config_dic):
     out_dir = config_dic['OUT']
     if not os.path.isdir(out_dir):
@@ -99,17 +102,11 @@ def prepare_directory(config_dic):
     if not os.path.isdir(os.path.join(config_dic['RESULT'], config_dic['REPORT']['PROJ_CO_CLONE'])):
         os.mkdir(os.path.join(config_dic['RESULT'], config_dic['REPORT']['PROJ_CO_CLONE']))
 
-    if not os.path.isdir(os.path.join(config_dic['RESULT'], config_dic['REPORT']['PROJ_MAX_SIM'])):
-        os.mkdir(os.path.join(config_dic['RESULT'], config_dic['REPORT']['PROJ_MAX_SIM']))
-
     if not os.path.isdir(os.path.join(config_dic['RESULT'], config_dic['REPORT']['CONT_SIM'])):
         os.mkdir(os.path.join(config_dic['RESULT'], config_dic['REPORT']['CONT_SIM']))
 
     if not os.path.isdir(os.path.join(config_dic['RESULT'], config_dic['REPORT']['CONT_CO_CLONE'])):
         os.mkdir(os.path.join(config_dic['RESULT'], config_dic['REPORT']['CONT_CO_CLONE']))
-
-    if not os.path.isdir(os.path.join(config_dic['RESULT'], config_dic['REPORT']['CONT_MAX_SIM'])):
-        os.mkdir(os.path.join(config_dic['RESULT'], config_dic['REPORT']['CONT_MAX_SIM']))
 
 
 def main():
@@ -127,6 +124,7 @@ def main():
     db.scan_files(training_set)
     db.scan_files(testing_set)
 
+    # If the config setting is set under ASM_2_VEC mode
     if config_dic['ASM_2_VEC']:
         utils.bin2asm(config_dic)
 
@@ -145,7 +143,7 @@ def main():
 
         asm2vec_imp.compute_project_level_sim(config_dic, test=True)
         asm2vec_imp.compute_contract_level_sim(config_dic, test=True)
-    else:
+    else: # If the config setting is set under DOC_2_VEC mode
         doc2vec_imp.train_model(config_dic)
         doc2vec_imp.compute_project_level_sim(config_dic, test=True)
         doc2vec_imp.compute_contract_level_sim(config_dic, test=True)

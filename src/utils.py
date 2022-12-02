@@ -9,6 +9,7 @@ from matplotlib import pyplot as plt
 from sympy.physics.control.control_plots import matplotlib
 
 
+# This function is for radare2 (r2) to convert the binary to asm
 def bin2asm(config):
     bin_dir = config['BIN']
     bin_training_dir = os.path.join(bin_dir, config["DATA"]["TRAINING_DIR"])
@@ -28,6 +29,8 @@ def bin2asm(config):
     generate_inst(bin_testing_dir_opt, asm_testing_dir_opt)
 
 
+# This function is a sub-function called by the bin2asm function.
+# It creates the control flow graph to generate opcodes
 def generate_inst(source, target):
     for proj in os.listdir(source):
         proj_dir = os.path.join(source, proj)
@@ -59,6 +62,7 @@ def generate_inst(source, target):
                 print(err)
 
 
+# This function is to filter out the bad, good, and the unknown projects using the white and black lists
 def clean_dataset(config):
     gc = 0
     bc = 0
@@ -113,6 +117,7 @@ def clean_dataset(config):
                         shutil.copytree(p3, os.path.join(testing_set, d3))
 
 
+# This function is used to create the probability density function graphs to determine the similarity value threshold
 def createPDF(simvalues):
     import warnings
     warnings.filterwarnings('ignore')
@@ -125,6 +130,7 @@ def createPDF(simvalues):
     plt.show()
 
 
+# This function is used to export all generated data into a csv file
 def generate_csv_report(filename, fields, rows):
     with open(filename, 'w') as csvfile:
         csvwriter = csv.writer(csvfile)

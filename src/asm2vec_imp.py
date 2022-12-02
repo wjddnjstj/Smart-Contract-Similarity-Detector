@@ -6,6 +6,7 @@ from datetime import datetime
 from tqdm import tqdm
 
 
+# This function is used to train the model under ASM_2_VEC Model
 def train(config, proj):
     if config['ASM_CONFIG']['DEVICE'] == 'auto':
         device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -45,6 +46,7 @@ def train(config, proj):
     )
 
 
+# This function is to show the predicted probability results when testing
 def test(config, target_proj):
     print('====================================================')
     tp = target_proj.rsplit('/', 1)[-1]
@@ -114,6 +116,7 @@ def project_similarity(target, source, config):
     return total_contract_sim / len(os.listdir(target))
 
 
+# Compute the similarity value using the cosine similarity
 def cosine_similarity(v1, v2):
     return v1 @ v2 / (v1.norm() * v2.norm()).item()
 

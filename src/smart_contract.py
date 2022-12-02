@@ -9,7 +9,9 @@ import subprocess
 import csv
 
 
+# This class does the compilation for the project and move the binary and opcodes into their corresponding directories
 class SmartContract:
+    # A set of all of the operators to distinguish them from the operands when formatting opcodes
     opcode_set = {"STOP", "ADD", "MUL", "SUB", "DIV", "SDIV", "MOD", "SMOD", "ADDMOD", "MULMOD", "EXP", "SIGNEXTEND",
                   "LT",
                   "GT", "SLT", "SGT", "EQ", "ISZERO", "AND", "OR", "EVMOR", "XOR", "NOT", "BYTE", "SHL", "SHR", "SAR",
@@ -37,6 +39,7 @@ class SmartContract:
 
         self.compile_contract()
 
+    # This function is used to create a solc instance
     def remove_void(self, line):
         while m := re.compile('//|/\*|"|\'').search(line):
             if m[0] == '//':
@@ -59,6 +62,7 @@ class SmartContract:
             return line[:m.start()], False
         return line, False
 
+    # This function is used to create a solc instance
     def get_pragma(self, file: str) -> Optional[str]:
         in_comment = False
         for line in file.splitlines():
@@ -73,6 +77,7 @@ class SmartContract:
                 return m[0]
         return None
 
+    # This function is used to create a solc instance
     def get_solc(self, filename: str) -> Optional[Path]:
         with open(filename) as f:
             file = f.read()
@@ -84,7 +89,7 @@ class SmartContract:
         except:
             return None
 
-    # Ask Simin why we need two (what the difference is between the two get_solc functions)
+    # This function is used to create a solc instance
     def get_solc(self, filename: str) -> Optional[Path]:
         with open(filename) as f:
             file = f.read()
@@ -96,11 +101,13 @@ class SmartContract:
         except:
             return None
 
+    # This function is to remove any empty files, format the opcodes, and to log the compilation messages on the console
     def post_compilation(self, save, process):
         self.remove_empty_files(save)
         self.format_opcode(save)
         self.log_message(process, save)
 
+    # This function is to execute the solc compiler commands to successfully compile the projects
     def exe_command(self, save, cmd):
         solc_compiler = self.get_solc(self.file_name)
         if not os.path.isdir(save):
@@ -111,6 +118,7 @@ class SmartContract:
         print("Compiling project" + save + "...")
         self.post_compilation(save, process)
 
+    # This function is called to compile the projects
     def compile_contract(self):
         if self.proj_dir == self.config['TRAINING_SET']:
             out_dir = os.path.join(self.config['OUT'], self.config['DATA']['TRAINING_DIR'])
@@ -127,20 +135,24 @@ class SmartContract:
             bin_dir = os.path.join(self.config['BIN'], self.config["DATA"]["TESTING_DIR"])
             bin_dir_opt = os.path.join(self.config['BIN'], self.config["DATA"]["TESTING_DIR_OPT"])
 
+        # Execution of the non-optimized versions
         save_dir = os.path.join(out_dir, self.proj_name)
         prefix = '--overwrite --opcodes --bin'
         self.exe_command(save_dir, prefix)
 
+        # Move opcodes to the opcode directory
         opcode_dir = os.path.join(opcode_dir, self.proj_name)
         if not os.path.isdir(opcode_dir) and len(os.listdir(save_dir)) > 0:
             os.mkdir(opcode_dir)
         self.save_opcode(save_dir, opcode_dir)
 
+        # Move binary code to the bin directory
         bin_dir = os.path.join(bin_dir, self.proj_name)
         if not os.path.isdir(bin_dir) and len(os.listdir(save_dir)) > 0:
             os.mkdir(bin_dir)
         self.save_bin_code(save_dir, bin_dir)
 
+        # Execute command under the optimized option
         save_dir_opt = os.path.join(out_dir_opt, self.proj_name + '_opt')
         prefix_opt = '--overwrite --opcodes --bin --optimize'
         self.exe_command(save_dir_opt, prefix_opt)
@@ -155,6 +167,7 @@ class SmartContract:
             os.mkdir(bin_dir_opt)
         self.save_bin_code(save_dir_opt, bin_dir_opt)
 
+    # This function is used to remove empty files
     @staticmethod
     def remove_empty_files(dir_name):
         for file in os.listdir(dir_name):
@@ -162,6 +175,7 @@ class SmartContract:
             if os.stat(full_path).st_size == 0:
                 os.remove(full_path)
 
+    # This function is used to format the generated opcode files into lines
     def format_opcode(self, dir_name):
         for opcode_filename in os.listdir(dir_name):
             if opcode_filename.endswith("opcode"):
@@ -186,6 +200,7 @@ class SmartContract:
                 f.write(formatted_opcode)
                 f.close()
 
+    # This function is used to log the process onto the console while compiling
     def log_message(self, process, save_dir):
         log_dir_success = os.path.join(self.config['LOG_DIR'], self.proj_name + "_out.csv")
         log_dir_error = os.path.join(self.config['LOG_DIR'], self.proj_name + "_err.csv")
@@ -203,6 +218,7 @@ class SmartContract:
             csvwriter.writerow(fields)
             csvwriter.writerow(row)
 
+    # This function is used to move the opcodes into the opcode directory
     @staticmethod
     def save_opcode(src_dirname, tar_dirname):
         for file in os.listdir(src_dirname):
@@ -213,6 +229,7 @@ class SmartContract:
             else:
                 continue
 
+    # This function is used to move the binary code into the bin directory
     @staticmethod
     def save_bin_code(src_dirname, tar_dirname):
         for file in os.listdir(src_dirname):
